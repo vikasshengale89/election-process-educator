@@ -1,5 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../auth';
 
 @Component({
@@ -21,13 +22,14 @@ import { AuthService } from '../auth';
     .auth-icon { font-size: 3rem; margin-bottom: var(--space-4); }
   `]
 })
-export class LoginSuccess implements OnInit {
+export class LoginSuccess implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
+  private subscription: Subscription | null = null;
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
+    this.subscription = this.route.queryParams.subscribe(params => {
       const sessionId = params['session_id'] as string | undefined;
       if (sessionId) {
         this.authService.setSession(sessionId);
@@ -37,5 +39,9 @@ export class LoginSuccess implements OnInit {
         this.router.navigate(['/login']);
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

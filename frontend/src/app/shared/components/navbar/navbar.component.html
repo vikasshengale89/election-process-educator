@@ -29,7 +29,7 @@
     </li>
     <li>
       <button class="btn-logout" (click)="logout()" aria-label="Log out">
-        {{ currentUser ? currentUser.name.split(' ')[0] : 'Guest' }} · {{ i18n.t('nav.logout') }}
+        {{ currentUser()?.name?.split(' ')?.[0] ?? 'Guest' }} · {{ i18n.t('nav.logout') }}
       </button>
     </li>
   </ul>

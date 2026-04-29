@@ -1,11 +1,11 @@
 import { Injectable, signal } from '@angular/core';
 
 interface ElectionReminder {
-  id: string;
-  title: string;
-  date: string;
-  daysUntil: number;
-  type: 'registration' | 'voting' | 'deadline';
+  readonly id: string;
+  readonly title: string;
+  readonly date: string;
+  readonly daysUntil: number;
+  readonly type: 'registration' | 'voting' | 'deadline';
 }
 
 @Injectable({ providedIn: 'root' })

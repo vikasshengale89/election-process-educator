@@ -6,23 +6,23 @@ import { Router } from '@angular/router';
 import { environment } from '../environments/environment';
 
 export interface User {
-  id: string;
-  name: string;
-  email?: string;
-  picture?: string;
-  isGuest: boolean;
+  readonly id: string;
+  readonly name: string;
+  readonly email?: string;
+  readonly picture?: string;
+  readonly isGuest: boolean;
 }
 
 interface GuestResponse {
-  session_id: string;
-  user: User;
+  readonly session_id: string;
+  readonly user: User;
 }
 
 interface GoogleJwtPayload {
-  sub: string;
-  name: string;
-  email: string;
-  picture: string;
+  readonly sub: string;
+  readonly name: string;
+  readonly email: string;
+  readonly picture: string;
 }
 
 @Injectable({
@@ -34,7 +34,7 @@ export class AuthService {
   private readonly router = inject(Router);
   private readonly platformId = inject(PLATFORM_ID);
 
-  private _currentUser = signal<User | null>(null);
+  private readonly _currentUser = signal<User | null>(null);
   readonly currentUser = this._currentUser.asReadonly();
   readonly isLoggedIn = computed(() => !!this._currentUser() || !!this.getSession());
 
@@ -59,10 +59,6 @@ export class AuthService {
     this.persistUser(user);
     this._currentUser.set(user);
     this.router.navigate(['/']);
-  }
-
-  getGoogleAuthUrl(): Observable<{ url: string }> {
-    return this.http.get<{ url: string }>(`${this.API_URL}/google`);
   }
 
   loginAsGuest(): Observable<GuestResponse> {

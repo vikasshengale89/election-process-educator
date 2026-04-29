@@ -1,149 +1,94 @@
-# Implementation Plan: Election Process Educator
+# Implementation Plan — Election Process Educator
 
-## Overview
-The Election Process Educator is a full-stack Angular 19 and Node.js application designed to guide citizens through the election process interactively. It leverages a modern Glassmorphism aesthetic and emphasizes accessibility, performance, and security.
+## Architecture Overview
 
-## Architecture
+- **Frontend:** Angular 21 SPA with standalone components, zoneless change detection, signal-based state management, and OnPush strategy
+- **Backend:** Node.js / Express REST API with TypeScript strict mode, Helmet security headers, CORS middleware, and Joi input validation
+- **Deployment:** Firebase Hosting (Spark Plan — free tier, static files only)
+- **Auth:** Google Identity Services (client-side OAuth) + Guest login fallback
+- **Styling:** CSS custom properties only — Glassmorphism design system with frosted glass panels, mesh gradient backgrounds
+
+## File Structure
+
 ```
-+-----------------------------------------------------------+
-|                      Frontend (Angular 19)                |
-|  +-------------+  +-------------+  +-----------------+    |
-|  | Components  |  |   Signals   |  |   Services      |    |
-|  +-------------+  +-------------+  +--------+--------+    |
-|                                             |             |
-|                    Firebase Hosting         |             |
-+---------------------------------------------|-------------+
-                                              | (HTTP/JSON)
-+---------------------------------------------|-------------+
-|                      Backend (Node.js/Express)            |
-|  +-------------+  +-------------+  +-----------------+    |
-|  |   Routes    |  | Controllers |  |   Services      |    |
-|  +-------------+  +-------------+  +--------+--------+    |
-|                                             |             |
-|                                             |             |
-|                 +---------------------------+             |
-+-----------------|-----------------------------------------+
-                  |
-         +--------v-------+
-         |   Firestore    | (Optional/Mock Data store)
-         +----------------+
+frontend/
+├── src/
+│   ├── app/
+│   │   ├── core/
+│   │   │   ├── services/        # i18n, logging, analytics, notification
+│   │   │   └── interceptors/    # HTTP error interceptor
+│   │   ├── shared/components/   # Navbar
+│   │   ├── features/
+│   │   │   ├── home/            # Dashboard with feature cards
+│   │   │   ├── wizard/          # Multi-step registration wizard
+│   │   │   ├── timeline/        # Filterable election timeline
+│   │   │   ├── glossary/        # Searchable term dictionary
+│   │   │   ├── quiz/            # Interactive knowledge quiz
+│   │   │   ├── polling/         # Polling location finder
+│   │   │   └── share/           # Social media sharing
+│   │   ├── login/               # Google Sign-In + Guest login
+│   │   ├── login-success/       # OAuth callback handler
+│   │   ├── auth.ts              # AuthService (signals, localStorage)
+│   │   ├── auth.guard.ts        # Route guard
+│   │   ├── app.component.ts     # Shell (navbar, idle detection, lang)
+│   │   ├── app.config.ts        # Providers (zoneless, router, http)
+│   │   └── app.routes.ts        # Lazy-loaded routes
+│   ├── environments/            # Dev / Prod config
+│   └── styles.css               # Global Glassmorphism design system
+backend/
+├── src/
+│   ├── config/                  # env.config, google.config
+│   ├── controllers/             # timeline, glossary, quiz, polling
+│   ├── middleware/               # CORS, error handler, Joi validation
+│   ├── routes/                  # Express route definitions
+│   └── utils/                   # Structured logger
 ```
-
-## Data Model
-1. **User**
-   - `id`: string
-   - `location`: string
-   - `isFirstTimeVoter`: boolean
-   - `preferences`: object (e.g., mail-in, in-person)
-2. **EventTimeline**
-   - `id`: string
-   - `date`: string
-   - `title`: string
-   - `description`: string
-   - `location`: string
-3. **GlossaryTerm**
-   - `id`: string
-   - `term`: string
-   - `definition`: string
-4. **PollingLocation**
-   - `id`: string
-   - `address`: string
-   - `name`: string
-   - `hours`: string
-
-## API Endpoints
-| Method | Path | Purpose | Auth Required |
-| :--- | :--- | :--- | :--- |
-| GET | `/api/v1/timeline/:location` | Fetch election dates for a location | No |
-| GET | `/api/v1/glossary` | Get list of election terminology | No |
-| GET | `/api/v1/polling-locations` | Find locations via address query | No |
-| POST | `/api/v1/checklist/generate` | Generate personalized checklist | No |
-| GET | `/api/v1/quiz/questions` | Get questions for the knowledge quiz | No |
-
-## Files to Create
-
-### Frontend
-- `src/app/core/services/api.service.ts`
-- `src/app/core/services/theme.service.ts`
-- `src/app/core/interceptors/error.interceptor.ts`
-- `src/app/features/home/home.component.ts` (and `.css`, `.html`)
-- `src/app/features/wizard/wizard.component.ts` (and `.css`, `.html`)
-- `src/app/features/timeline/timeline.component.ts` (and `.css`, `.html`)
-- `src/app/features/glossary/glossary.component.ts` (and `.css`, `.html`)
-- `src/app/features/quiz/quiz.component.ts` (and `.css`, `.html`)
-- `src/app/shared/components/glass-card/glass-card.component.ts`
-- `src/app/shared/components/navbar/navbar.component.ts`
-- `src/app/shared/components/footer/footer.component.ts`
-- `src/styles.css` (Glassmorphism design tokens)
-- `src/app/app.routes.ts`
-
-### Backend
-- `src/index.ts`
-- `src/routes/api.routes.ts`
-- `src/controllers/timeline.controller.ts`
-- `src/controllers/glossary.controller.ts`
-- `src/controllers/polling.controller.ts`
-- `src/controllers/quiz.controller.ts`
-- `src/services/data.service.ts`
-- `src/middleware/error.middleware.ts`
-- `src/middleware/cors.middleware.ts`
-- `src/config/env.config.ts`
 
 ## Dependencies
+
 ### Frontend
-- `particles.js` (For ambient idle background animations)
-- `@angular/animations` (For micro-interactions)
+- @angular/core, router, common, forms, animations, platform-browser
+- rxjs, tslib
+- vitest (dev — unit testing)
 
 ### Backend
-- `express`: Core framework
-- `cors`: Cross-Origin Resource Sharing
-- `dotenv`: Environment variable management
-- `helmet`: Security headers
-- `joi`: Input validation
+- express, helmet, cors, joi, uuid, google-auth-library, dotenv
+- typescript, ts-node, nodemon (dev)
 
 ## Build Order
 
-### Phase 1 (MVP)
-1. Set up routing, standalone configuration, and zoneless change detection on frontend.
-2. Initialize backend Express server with core middleware (cors, helmet, error handling).
-3. Implement `styles.css` with Glassmorphism variables and global classes.
-4. Build `GlassCardComponent`, `NavbarComponent`.
-5. Implement `HomeComponent` and simple routing.
+### Phase 1 — Foundation
+1. Scaffold Angular app with standalone config, zoneless detection
+2. Set up Express backend with Helmet, CORS, structured logger
+3. Implement environment configs and proxy for local dev
+4. Create global Glassmorphism CSS design system
 
-### Phase 2 (Features)
-1. Build Node.js API endpoints (Mock data services).
-2. Implement Frontend `ApiService` to connect to backend.
-3. Build `WizardComponent` for personalized checklists.
-4. Build `TimelineComponent` for election dates.
-5. Build `GlossaryComponent` and `QuizComponent`.
+### Phase 2 — Authentication
+5. Implement Google Identity Services client-side auth
+6. Implement guest login with localStorage fallback
+7. Create auth guard and route protection
+8. Add reCAPTCHA v3 integration on login
 
-### Phase 3 (Polish)
-1. Add Accessibility (A11y) improvements (ARIA labels, keyboard navigation, contrast checks).
-2. Implement Performance enhancements (lazy loading routes, signals for state, optimize images).
-3. Add responsive design tweaks.
-4. Fix any linter errors and ensure strict typing across the stack.
+### Phase 3 — Core Features
+9. Build voter registration wizard (4-step, personalized checklist)
+10. Build election timeline (filterable by type)
+11. Build glossary (searchable, categorized, 16 terms)
+12. Build knowledge quiz (7 questions, scoring, grade)
 
-### Phase 4 (Wow Factor)
-**Real-time Ambient Idle Mode with CSS Particle Animations + Event Countdown**
-1. Track user idle time via host listeners in `app.component.ts`.
-2. When idle > 30s, trigger a full-screen ambient mode displaying a beautiful CSS mesh gradient animation.
-3. Overlay a live countdown timer to the nearest major election event.
-4. Hide on user interaction (mouse move, key press).
+### Phase 4 — Extended Features
+13. Build polling location finder (address input, state ID requirements)
+14. Build social share (Twitter, Facebook, LinkedIn, WhatsApp, copy link)
+15. Implement election reminder notifications (Web Notification API)
+16. Implement bilingual support (English / Spanish) via I18nService
 
-## Security Checklist
-- [ ] Implement `helmet` for secure HTTP headers.
-- [ ] Configure `cors` to only allow frontend dev and prod domains.
-- [ ] Validate all inputs using `joi`.
-- [ ] Ensure `.env` is gitignored and no hardcoded secrets exist.
-- [ ] Use Angular's built-in XSS protection for all data binding.
+### Phase 5 — Polish & Quality
+17. Add Google Analytics tracking (page views, events)
+18. Add idle detection with animated screensaver (Wow Factor)
+19. Write comprehensive unit tests (115+ tests, 16 files)
+20. Add WCAG 2.1 AA accessibility (ARIA, keyboard, high contrast, reduced motion)
 
-## Testing Strategy
-- Unit test backend controllers using mock services.
-- Unit test frontend components using Angular testing framework (Karma/Jasmine).
-- Test API endpoints with cURL or Postman.
-
-## Time Allocation
-- Setup & MVP: 2 hours
-- Features: 3 hours
-- Polish & Wow Factor: 2 hours
-- Testing & Deployment: 1 hour
+### Phase 6 — Deployment
+21. Configure Firebase Hosting with security headers and CSP
+22. Create static API JSON files for Spark plan hosting
+23. Build production bundle and deploy to Firebase
+24. Verify all functionality on live URL

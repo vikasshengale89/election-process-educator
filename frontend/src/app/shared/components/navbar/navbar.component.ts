@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, computed } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../auth';
 import { I18nService } from '../../../core/services/i18n.service';
@@ -14,11 +14,8 @@ import { I18nService } from '../../../core/services/i18n.service';
 export class NavbarComponent {
   private readonly authService = inject(AuthService);
   readonly i18n = inject(I18nService);
-  isMenuOpen = signal(false);
-
-  get currentUser() {
-    return this.authService.currentUser();
-  }
+  readonly isMenuOpen = signal(false);
+  readonly currentUser = computed(() => this.authService.currentUser());
 
   toggleMenu(): void {
     this.isMenuOpen.update(v => !v);

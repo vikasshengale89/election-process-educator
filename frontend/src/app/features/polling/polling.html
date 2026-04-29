@@ -15,12 +15,12 @@
         [value]="searchAddress()"
         (input)="onAddressInput($event)"
         (keydown.enter)="search()"
-        aria-label="Enter your address to find polling locations" />
+        [attr.aria-label]="i18n.t('polling.placeholder')" />
       <button
         class="btn-primary"
         (click)="search()"
         [disabled]="isSearching() || !searchAddress().trim()"
-        aria-label="Search for polling locations">
+        [attr.aria-label]="i18n.t('polling.search')">
         {{ isSearching() ? '...' : i18n.t('polling.search') }}
       </button>
     </div>
@@ -28,7 +28,7 @@
 
   @if (hasSearched() && results().length > 0) {
     <section aria-label="Polling locations found">
-      <h2 class="section-title">Nearby Polling Locations</h2>
+      <h2 class="section-title">{{ i18n.t('polling.nearbyTitle') }}</h2>
       <div class="locations-grid" role="list">
         @for (loc of results(); track loc.name) {
           <article class="location-card glass-panel" role="listitem">
@@ -55,8 +55,8 @@
     </section>
 
     <section class="glass-panel id-section" aria-labelledby="id-heading">
-      <h2 id="id-heading">🪪 Required Identification Documents — {{ stateName() }}</h2>
-      <p>Based on your location, you will need one of the following:</p>
+      <h2 id="id-heading">🪪 {{ i18n.t('polling.idTitle') }} — {{ stateName() }}</h2>
+      <p>{{ i18n.t('polling.idNote') }}</p>
       <ul class="id-list" role="list">
         @for (doc of idDocuments(); track doc) {
           <li role="listitem">{{ doc }}</li>
@@ -67,25 +67,25 @@
 
   @if (hasSearched() && results().length === 0) {
     <div class="glass-panel empty-state" role="status" aria-live="polite">
-      <p>No polling locations found. Please check your address and try again.</p>
+      <p>{{ i18n.t('polling.noResults') }}</p>
     </div>
   }
 
   @if (!hasSearched() && !isSearching()) {
     <div class="glass-panel info-section">
-      <h2>How It Works</h2>
+      <h2>{{ i18n.t('polling.howItWorks') }}</h2>
       <div class="steps-row">
         <div class="info-step">
           <span class="step-num" aria-hidden="true">1</span>
-          <p>Enter your registered address above</p>
+          <p>{{ i18n.t('polling.step1') }}</p>
         </div>
         <div class="info-step">
           <span class="step-num" aria-hidden="true">2</span>
-          <p>We find your nearest polling locations</p>
+          <p>{{ i18n.t('polling.step2') }}</p>
         </div>
         <div class="info-step">
           <span class="step-num" aria-hidden="true">3</span>
-          <p>View hours, accessibility info, and ID requirements</p>
+          <p>{{ i18n.t('polling.step3') }}</p>
         </div>
       </div>
     </div>

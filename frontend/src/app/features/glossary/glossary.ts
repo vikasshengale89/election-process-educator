@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy, signal, computed, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { TitleCasePipe } from '@angular/common';
 import { I18nService } from '../../core/services/i18n.service';
 
@@ -13,7 +12,7 @@ interface GlossaryTerm {
 @Component({
   selector: 'app-glossary',
   standalone: true,
-  imports: [FormsModule, TitleCasePipe],
+  imports: [TitleCasePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './glossary.html',
   styleUrl: './glossary.css'

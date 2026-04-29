@@ -1,6 +1,7 @@
-import { Component, ChangeDetectionStrategy, HostListener, signal, inject, PLATFORM_ID, OnDestroy, Renderer2 } from '@angular/core';
+import { Component, ChangeDetectionStrategy, HostListener, signal, inject, PLATFORM_ID, OnDestroy, Renderer2, DestroyRef } from '@angular/core';
 import { isPlatformBrowser, DOCUMENT } from '@angular/common';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { AuthService } from './auth';
 import { I18nService } from './core/services/i18n.service';
@@ -15,8 +16,8 @@ import { filter } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnDestroy {
-  isIdle = signal(false);
-  showNavbar = signal(false);
+  readonly isIdle = signal(false);
+  readonly showNavbar = signal(false);
 
   private idleTimeout: ReturnType<typeof setTimeout> | null = null;
   private readonly IDLE_TIME_MS = 60_000;
@@ -26,6 +27,7 @@ export class AppComponent implements OnDestroy {
   readonly i18n = inject(I18nService);
   private readonly renderer = inject(Renderer2);
   private readonly document = inject(DOCUMENT);
+  private readonly destroyRef = inject(DestroyRef);
 
   constructor() {
     if (isPlatformBrowser(this.platformId)) {
@@ -34,7 +36,8 @@ export class AppComponent implements OnDestroy {
     }
 
     this.router.events.pipe(
-      filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      takeUntilDestroyed(this.destroyRef)
     ).subscribe(event => {
       const isLoginRoute = event.urlAfterRedirects.startsWith('/login');
       this.showNavbar.set(!isLoginRoute && this.authService.isLoggedIn());

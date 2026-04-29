@@ -6,37 +6,36 @@
 
 .progress-wrap { padding: 1.25rem 1.5rem; }
 .progress-labels { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem; }
-.progress-track { background: rgba(255,255,255,0.1); border-radius: 1rem; height: 6px; overflow: hidden; }
-.progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #8b5cf6); border-radius: 1rem; transition: width 0.5s ease; }
+.progress-track { background: var(--glass-bg); border-radius: 1rem; height: 6px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--purple)); border-radius: 1rem; transition: width 0.5s ease; }
 
 .step-dots { display: flex; gap: 0.5rem; justify-content: center; margin-top: 1rem; }
-.step-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.15); transition: all 0.3s ease; }
+.step-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--glass-bg); transition: all var(--transition-base); }
 .step-dot.active { background: var(--accent); }
-.step-dot.current { transform: scale(1.4); box-shadow: 0 0 8px rgba(59,130,246,0.6); }
+.step-dot.current { transform: scale(1.4); box-shadow: 0 0 8px var(--accent); }
 
 .question-card { display: flex; flex-direction: column; gap: 1.25rem; }
-.step-badge { display: inline-block; background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.3); color: #93c5fd; padding: 0.25rem 0.9rem; border-radius: 2rem; font-size: 0.8rem; font-weight: 600; width: fit-content; }
+.step-badge { display: inline-block; background: var(--accent-light); border: 1px solid var(--accent); color: var(--accent); padding: 0.25rem 0.9rem; border-radius: 2rem; font-size: 0.8rem; font-weight: 600; width: fit-content; }
 .question-card h2 { font-size: 1.4rem; margin: 0; }
 
 .options-grid { display: flex; flex-direction: column; gap: 0.75rem; }
 .option-btn {
   display: flex; align-items: center; gap: 1rem;
-  background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border);
+  background: var(--glass-bg); border: 1px solid var(--glass-border);
   border-radius: 0.75rem; padding: 1rem 1.25rem;
   color: var(--text-primary); cursor: pointer; text-align: left;
   transition: all 0.25s ease; width: 100%;
 }
 .option-btn:hover, .option-btn[aria-checked="true"] {
-  background: rgba(59,130,246,0.15); border-color: var(--accent);
+  background: var(--accent-light); border-color: var(--accent);
   transform: translateX(4px);
 }
 .option-icon { font-size: 1.5rem; flex-shrink: 0; }
 .option-label { font-size: 1rem; font-weight: 500; }
 
-.btn-back { background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 0.9rem; padding: 0; transition: color 0.2s; width: fit-content; }
+.btn-back { background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 0.9rem; padding: 0; transition: color var(--transition-fast); width: fit-content; }
 .btn-back:hover { color: var(--text-primary); }
 
-/* Results */
 .results-card { display: flex; flex-direction: column; gap: 1.5rem; }
 .results-header { text-align: center; }
 .results-icon { font-size: 3rem; display: block; margin-bottom: 0.75rem; }
@@ -44,8 +43,8 @@
 .results-header p { margin: 0; }
 
 .checklist { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; }
-.checklist-item { background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-radius: 0.5rem; padding: 0.85rem 1rem; font-size: 0.95rem; color: var(--text-secondary); }
+.checklist-item { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 0.5rem; padding: 0.85rem 1rem; font-size: 0.95rem; color: var(--text-secondary); }
 
 .results-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
-.btn-outline-btn { background: transparent; border: 1px solid var(--glass-border); color: var(--text-primary); padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+.btn-outline-btn { background: transparent; border: 1px solid var(--glass-border); color: var(--text-primary); padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all var(--transition-base); }
 .btn-outline-btn:hover { background: var(--glass-bg); }

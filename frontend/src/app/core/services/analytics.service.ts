@@ -1,6 +1,7 @@
-import { Injectable, inject, PLATFORM_ID } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID, DestroyRef } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -15,6 +16,7 @@ declare global {
 export class AnalyticsService {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
   private initialized = false;
 
   init(): void {
@@ -53,7 +55,8 @@ export class AnalyticsService {
 
   private trackPageViews(): void {
     this.router.events.pipe(
-      filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      takeUntilDestroyed(this.destroyRef)
     ).subscribe(event => {
       window.gtag?.('event', 'page_view', {
         page_path: event.urlAfterRedirects

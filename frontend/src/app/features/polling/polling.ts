@@ -11,12 +11,12 @@ interface PollingLocation {
 }
 
 interface PollingResponse {
-  success: boolean;
-  data: {
-    locations: PollingLocation[];
-    idRequirements: { state: string; documents: string[] };
-    state: string;
-    zip: string;
+  readonly success: boolean;
+  readonly data: {
+    readonly locations: PollingLocation[];
+    readonly idRequirements: { readonly state: string; readonly documents: string[] };
+    readonly state: string;
+    readonly zip: string;
   };
 }
 

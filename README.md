@@ -8,7 +8,7 @@ An interactive AI guide to demystifying democracy. This assistant provides clear
 
 - **Voter Registration Wizard** — Multi-step personalized questionnaire that generates a custom voting checklist based on your voter status, method, ID, and address
 - **Election Timeline** — Filterable chronological track of vital election deadlines with location-based events
-- **Glossary** — Searchable, categorized dictionary of 50+ election terms explained in plain language
+- **Glossary** — Searchable, categorized dictionary of 16 election terms explained in plain language
 - **Knowledge Quiz** — 7-question interactive quiz with immediate feedback, explanations, and grading
 - **Polling Location Finder** — Address-based search returning nearby locations, hours, accessibility features, and state-specific ID requirements
 - **Social Share** — Share voter readiness status on Twitter/X, Facebook, LinkedIn, WhatsApp, or copy link
@@ -35,7 +35,7 @@ An interactive AI guide to demystifying democracy. This assistant provides clear
 
 ## Quality Metrics
 
-- **89 unit tests** passing across 14 test files
+- **115+ unit tests** passing across 16+ test files
 - **Zero linter errors** — strict TypeScript, no `any` types
 - **100 KB** production transfer size (loads in < 1 second)
 - **WCAG 2.1 AA** compliant — skip links, ARIA labels, keyboard navigation, high contrast, `prefers-reduced-motion`
@@ -76,7 +76,7 @@ An interactive AI guide to demystifying democracy. This assistant provides clear
 
 - [x] Angular Frontend with Glassmorphism UI
 - [x] Node.js Express Backend API
-- [x] Unit Tests Passing (89 tests, 14 files)
+- [x] Unit Tests Passing (115+ tests, 16+ files)
 - [x] Requirements Document (requirements.md)
 - [x] Implementation Plan (implementation_plan.md)
 - [x] Flow Document (FLOW.md)

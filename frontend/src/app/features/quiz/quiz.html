@@ -1,27 +1,25 @@
 <div class="quiz-page">
   <div class="page-header">
-    <h1>🧠 Election Knowledge Quiz</h1>
-    <p>Test how ready you are for the ballot box. {{ totalQuestions }} questions.</p>
+    <h1>🧠 {{ i18n.t('quiz.title') }}</h1>
+    <p>{{ i18n.t('quiz.subtitle') }} {{ totalQuestions }} {{ i18n.t('quiz.question').toLowerCase() }}s.</p>
   </div>
 
   @if (!isComplete()) {
-    <!-- Progress -->
     <div class="glass-panel progress-wrap"
          role="progressbar"
          [attr.aria-valuenow]="currentIndex() + 1"
          [attr.aria-valuemin]="1"
          [attr.aria-valuemax]="totalQuestions"
-         [attr.aria-label]="'Question ' + (currentIndex() + 1) + ' of ' + totalQuestions">
+         [attr.aria-label]="i18n.t('quiz.question') + ' ' + (currentIndex() + 1) + ' / ' + totalQuestions">
       <div class="progress-labels">
-        <span>Question {{ currentIndex() + 1 }} / {{ totalQuestions }}</span>
-        <span class="score-pill">Score: {{ score() }}/{{ currentIndex() }}</span>
+        <span>{{ i18n.t('quiz.question') }} {{ currentIndex() + 1 }} / {{ totalQuestions }}</span>
+        <span class="score-pill">{{ i18n.t('quiz.score') }}: {{ score() }}/{{ currentIndex() }}</span>
       </div>
       <div class="progress-track">
         <div class="progress-fill" [style.width.%]="progressPct()"></div>
       </div>
     </div>
 
-    <!-- Question -->
     <div class="glass-panel question-card">
       <p class="question-text">{{ currentQuestion().question }}</p>
 
@@ -43,11 +41,11 @@
 
       @if (selectedAnswer() !== null) {
         <div class="explanation" [class.correct-bg]="answeredCorrectly()" [class.wrong-bg]="!answeredCorrectly()" role="alert" aria-live="polite">
-          <strong>{{ answeredCorrectly() ? '✅ Correct!' : '❌ Not quite.' }}</strong>
+          <strong>{{ answeredCorrectly() ? '✅ ' + i18n.t('quiz.correct') : '❌ ' + i18n.t('quiz.incorrect') }}</strong>
           <p>{{ currentQuestion().explanation }}</p>
         </div>
-        <button class="btn-primary next-btn" (click)="nextQuestion()" aria-label="{{ currentIndex() < totalQuestions - 1 ? 'Next question' : 'See results' }}">
-          {{ currentIndex() < totalQuestions - 1 ? 'Next Question →' : 'See Results 🎉' }}
+        <button class="btn-primary next-btn" (click)="nextQuestion()" [attr.aria-label]="currentIndex() < totalQuestions - 1 ? i18n.t('quiz.next') : i18n.t('quiz.results')">
+          {{ currentIndex() < totalQuestions - 1 ? i18n.t('quiz.next') + ' →' : i18n.t('quiz.results') + ' 🎉' }}
         </button>
       }
     </div>
@@ -61,15 +59,11 @@
       </div>
       <h2 [class]="grade().colorClass">{{ grade().label }}</h2>
       <p class="results-msg">
-        @if (scorePercent() >= 70) {
-          You're well-prepared for the ballot box! Keep up the great civic knowledge.
-        } @else {
-          Don't worry — visit our <strong>Glossary</strong> and <strong>Timeline</strong> pages to brush up, then try again!
-        }
+        {{ scorePercent() >= 70 ? i18n.t('quiz.wellPrepared') : i18n.t('quiz.keepLearning') }}
       </p>
       <div class="results-actions">
-        <button class="btn-primary" (click)="restart()" aria-label="Retake the quiz">
-          Retake Quiz 🔄
+        <button class="btn-primary" (click)="restart()" [attr.aria-label]="i18n.t('quiz.retake')">
+          {{ i18n.t('quiz.retake') }} 🔄
         </button>
       </div>
     </div>

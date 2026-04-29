@@ -7,7 +7,7 @@
   <div class="glass-panel share-card">
     <div class="readiness-badge">
       <span class="badge-icon" aria-hidden="true">✅</span>
-      <span class="badge-text">Voter Ready!</span>
+      <span class="badge-text">{{ i18n.t('share.readyBadge') }}</span>
     </div>
 
     <p class="share-preview">{{ shareMessage }}</p>
@@ -29,20 +29,20 @@
       <button
         class="btn-primary copy-btn"
         (click)="copyLink()"
-        [attr.aria-label]="isCopied() ? 'Link copied!' : 'Copy share link'">
-        {{ isCopied() ? '✅ ' + i18n.t('share.copied') : '🔗 Copy Link' }}
+        [attr.aria-label]="isCopied() ? i18n.t('share.copied') : i18n.t('share.copyLink')">
+        {{ isCopied() ? '✅ ' + i18n.t('share.copied') : '🔗 ' + i18n.t('share.copyLink') }}
       </button>
     </div>
   </div>
 
   <div class="glass-panel checklist-share">
-    <h2>Your Voter Readiness Status</h2>
+    <h2>{{ i18n.t('share.readinessTitle') }}</h2>
     <ul class="status-list" role="list">
-      <li role="listitem"><span class="check" aria-hidden="true">✅</span> Registered to vote</li>
-      <li role="listitem"><span class="check" aria-hidden="true">✅</span> Know my polling location</li>
-      <li role="listitem"><span class="check" aria-hidden="true">✅</span> Have valid ID ready</li>
-      <li role="listitem"><span class="check" aria-hidden="true">✅</span> Reviewed election timeline</li>
-      <li role="listitem"><span class="check" aria-hidden="true">✅</span> Understand key election terms</li>
+      <li role="listitem"><span class="check" aria-hidden="true">✅</span> {{ i18n.t('share.registered') }}</li>
+      <li role="listitem"><span class="check" aria-hidden="true">✅</span> {{ i18n.t('share.knowLocation') }}</li>
+      <li role="listitem"><span class="check" aria-hidden="true">✅</span> {{ i18n.t('share.haveId') }}</li>
+      <li role="listitem"><span class="check" aria-hidden="true">✅</span> {{ i18n.t('share.reviewedTimeline') }}</li>
+      <li role="listitem"><span class="check" aria-hidden="true">✅</span> {{ i18n.t('share.understandTerms') }}</li>
     </ul>
   </div>
 </div>
