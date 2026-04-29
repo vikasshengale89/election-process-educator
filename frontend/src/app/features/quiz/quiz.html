@@ -55,11 +55,11 @@
 
   @if (isComplete()) {
     <div class="glass-panel results-card" role="region" aria-label="Quiz results">
-      <div class="results-score" [style.color]="grade().color">
+      <div class="results-score" [class]="grade().colorClass">
         <span class="big-score">{{ score() }}/{{ totalQuestions }}</span>
         <span class="score-pct">({{ scorePercent() }}%)</span>
       </div>
-      <h2 [style.color]="grade().color">{{ grade().label }}</h2>
+      <h2 [class]="grade().colorClass">{{ grade().label }}</h2>
       <p class="results-msg">
         @if (scorePercent() >= 70) {
           You're well-prepared for the ballot box! Keep up the great civic knowledge.

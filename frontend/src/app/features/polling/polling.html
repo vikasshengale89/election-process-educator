@@ -4,7 +4,6 @@
     <p>{{ i18n.t('polling.subtitle') }}</p>
   </div>
 
-  <!-- Search Section -->
   <div class="glass-panel search-section">
     <label for="address-input" class="sr-only">{{ i18n.t('polling.placeholder') }}</label>
     <div class="search-row">
@@ -14,7 +13,7 @@
         class="search-input"
         [placeholder]="i18n.t('polling.placeholder')"
         [value]="searchAddress()"
-        (input)="searchAddress.set($any($event.target).value)"
+        (input)="onAddressInput($event)"
         (keydown.enter)="search()"
         aria-label="Enter your address to find polling locations" />
       <button
@@ -27,8 +26,7 @@
     </div>
   </div>
 
-  @if (hasSearched()) {
-    <!-- Results -->
+  @if (hasSearched() && results().length > 0) {
     <section aria-label="Polling locations found">
       <h2 class="section-title">Nearby Polling Locations</h2>
       <div class="locations-grid" role="list">
@@ -56,9 +54,8 @@
       </div>
     </section>
 
-    <!-- ID Requirements -->
     <section class="glass-panel id-section" aria-labelledby="id-heading">
-      <h2 id="id-heading">🪪 Required Identification Documents</h2>
+      <h2 id="id-heading">🪪 Required Identification Documents — {{ stateName() }}</h2>
       <p>Based on your location, you will need one of the following:</p>
       <ul class="id-list" role="list">
         @for (doc of idDocuments(); track doc) {
@@ -66,6 +63,12 @@
         }
       </ul>
     </section>
+  }
+
+  @if (hasSearched() && results().length === 0) {
+    <div class="glass-panel empty-state" role="status" aria-live="polite">
+      <p>No polling locations found. Please check your address and try again.</p>
+    </div>
   }
 
   @if (!hasSearched() && !isSearching()) {

@@ -1,10 +1,9 @@
 <div class="timeline-page">
   <div class="page-header">
-    <h1>📅 Election Timeline</h1>
-    <p>Key dates and deadlines for the 2025–2026 election cycle.</p>
+    <h1>📅 {{ i18n.t('timeline.title') }}</h1>
+    <p>{{ i18n.t('timeline.subtitle') }}</p>
   </div>
 
-  <!-- Filters -->
   <div class="filter-bar glass-panel" role="group" aria-label="Filter timeline events by type">
     @for (filter of filters; track filter) {
       <button
@@ -18,15 +17,14 @@
     }
   </div>
 
-  <!-- Timeline -->
   <div class="timeline" role="list" aria-label="Election timeline events">
     @for (event of filteredEvents(); track event.date) {
       <div class="timeline-item glass-panel" role="listitem">
-        <div class="timeline-dot" [style.background]="getTypeColor(event.type)" aria-hidden="true"></div>
+        <div class="timeline-dot" [class]="getTypeClass(event.type)" aria-hidden="true"></div>
         <div class="timeline-content">
           <div class="event-meta">
             <span class="event-date">📆 {{ event.date }}</span>
-            <span class="event-tag" [style.background]="getTypeColor(event.type) + '33'" [style.color]="getTypeColor(event.type)">
+            <span class="event-tag" [class]="getTypeClass(event.type)">
               {{ getTypeLabel(event.type) }}
             </span>
           </div>
@@ -44,6 +42,6 @@
   </div>
 
   <div class="disclaimer glass-panel">
-    <p>⚠️ <strong>Dates shown are illustrative examples.</strong> Always verify exact deadlines with your local or state election office at <a href="https://vote.gov" target="_blank" rel="noopener noreferrer">vote.gov</a>.</p>
+    <p>⚠️ <strong>{{ i18n.t('timeline.disclaimer') }}</strong> <a href="https://vote.gov" target="_blank" rel="noopener noreferrer">vote.gov</a></p>
   </div>
 </div>

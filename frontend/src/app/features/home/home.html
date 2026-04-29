@@ -28,7 +28,7 @@
   <div class="features-grid" role="list">
     @for (feature of features; track feature.route) {
       <article class="feature-card glass-panel" role="listitem">
-        <div class="feature-icon" [style.color]="feature.color" aria-hidden="true">{{ feature.icon }}</div>
+        <div class="feature-icon" [class]="feature.colorClass" aria-hidden="true">{{ feature.icon }}</div>
         <h3>{{ feature.title }}</h3>
         <p>{{ feature.description }}</p>
         <a [routerLink]="feature.route" class="btn-primary feature-cta" [attr.aria-label]="feature.cta + ' — ' + feature.title">

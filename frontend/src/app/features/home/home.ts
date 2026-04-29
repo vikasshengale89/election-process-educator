@@ -9,7 +9,7 @@ interface FeatureCard {
   readonly description: string;
   readonly route: string;
   readonly cta: string;
-  readonly color: string;
+  readonly colorClass: string;
 }
 
 @Component({
@@ -25,54 +25,12 @@ export class Home {
   readonly notifications = inject(NotificationService);
 
   readonly features: FeatureCard[] = [
-    {
-      icon: '📋',
-      title: 'Voter Wizard',
-      description: 'Step-by-step personalized guide through the registration process tailored to your situation.',
-      route: '/wizard',
-      cta: 'Start Wizard',
-      color: '#3b82f6'
-    },
-    {
-      icon: '📅',
-      title: 'Election Timeline',
-      description: 'Interactive timeline of key election dates, deadlines, and milestones for your location.',
-      route: '/timeline',
-      cta: 'View Timeline',
-      color: '#8b5cf6'
-    },
-    {
-      icon: '📖',
-      title: 'Glossary',
-      description: 'Plain-language explanations of complex election jargon — no law degree required.',
-      route: '/glossary',
-      cta: 'Explore Terms',
-      color: '#06b6d4'
-    },
-    {
-      icon: '🧠',
-      title: 'Knowledge Quiz',
-      description: 'Test your election knowledge and see how ready you are for the ballot box.',
-      route: '/quiz',
-      cta: 'Take the Quiz',
-      color: '#10b981'
-    },
-    {
-      icon: '📍',
-      title: 'Polling Locations',
-      description: 'Find your nearest polling location, operating hours, and required ID documents.',
-      route: '/polling',
-      cta: 'Find Location',
-      color: '#f59e0b'
-    },
-    {
-      icon: '📢',
-      title: 'Share Readiness',
-      description: 'Let your friends and family know you are ready to vote — spread the word!',
-      route: '/share',
-      cta: 'Share Status',
-      color: '#ec4899'
-    }
+    { icon: '📋', title: 'Voter Wizard', description: 'Step-by-step personalized guide through the registration process tailored to your situation.', route: '/wizard', cta: 'Start Wizard', colorClass: 'color-accent' },
+    { icon: '📅', title: 'Election Timeline', description: 'Interactive timeline of key election dates, deadlines, and milestones for your location.', route: '/timeline', cta: 'View Timeline', colorClass: 'color-purple' },
+    { icon: '📖', title: 'Glossary', description: 'Plain-language explanations of complex election jargon — no law degree required.', route: '/glossary', cta: 'Explore Terms', colorClass: 'color-cyan' },
+    { icon: '🧠', title: 'Knowledge Quiz', description: 'Test your election knowledge and see how ready you are for the ballot box.', route: '/quiz', cta: 'Take the Quiz', colorClass: 'color-success' },
+    { icon: '📍', title: 'Polling Locations', description: 'Find your nearest polling location, operating hours, and required ID documents.', route: '/polling', cta: 'Find Location', colorClass: 'color-warning' },
+    { icon: '📢', title: 'Share Readiness', description: 'Let your friends and family know you are ready to vote — spread the word!', route: '/share', cta: 'Share Status', colorClass: 'color-pink' },
   ];
 
   readonly stats = [

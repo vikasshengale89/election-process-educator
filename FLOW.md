@@ -14,7 +14,7 @@ The **Election Process Educator** is a full-stack web application designed to gu
 
 ### 1. Initial Access & WOW Factor
 - When a user visits the application, they land on the **Home Page**, greeted by a vibrant mesh-gradient background and a sleek glassmorphic interface.
-- **Ambient Idle Experience**: If the user remains inactive for 30 seconds, an interactive particle animation triggers, transforming the screen into a captivating, ambient countdown timer to Election Day. Moving the mouse or tapping the screen dismisses the overlay instantly.
+- **Ambient Idle Experience**: If the user remains inactive for 60 seconds, an interactive mesh-gradient animation triggers, transforming the screen into a captivating ambient display. Moving the mouse, pressing a key, or tapping the screen dismisses the overlay instantly.
 
 ### 2. Authentication Flow
 - Users can "Login as Guest" using a mock OAuth flow handled by the `AuthService`.
@@ -41,6 +41,34 @@ Once authenticated, users can navigate between four main educational modules usi
 #### D. Knowledge Quiz (`/quiz`)
 - A 7-question interactive quiz to test the user's comprehension of the electoral process.
 - Features immediate feedback on answers, detailed explanations for correct/incorrect choices, and a final grade screen (e.g., "Democracy Champion! 🏆").
+
+#### E. Polling Location Finder (`/polling`)
+- Users enter their address to find nearby polling locations with operating hours and accessibility features.
+- Displays required identification documents based on the user's state.
+- Connects to the backend `/api/v1/polling` endpoint for location data.
+
+#### F. Social Share (`/share`)
+- Users can share their voter readiness status on Twitter/X, Facebook, LinkedIn, or WhatsApp.
+- Includes a copy-to-clipboard function for sharing the app link.
+- Displays a voter readiness checklist summarizing the user's preparation.
+
+### 4. Cross-Cutting Features
+
+#### Bilingual Support (English / Spanish)
+- A signal-based `I18nService` provides live language switching across the entire UI.
+- Users toggle between English and Spanish via the navigation bar.
+- The `<html lang>` attribute updates dynamically to match the selected language.
+
+#### Election Reminders
+- A `NotificationService` manages mock push notification alerts for upcoming election deadlines.
+- Users enable reminders from the Home page; the service uses the Web Notification API when permission is granted.
+
+#### Google Services Integration
+- **Google OAuth 2.0**: Secure authentication via Google Sign-In.
+- **Google Analytics (gtag.js)**: Page view tracking and custom event analytics.
+- **Google reCAPTCHA v3**: Bot protection on the login form (invisible challenge).
+- **Google Fonts**: Inter typeface loaded from fonts.googleapis.com.
+- **Firebase Hosting**: Static SPA deployment on the free Spark plan.
 
 ## Data Flow (Client-Server)
 1. **Frontend Request**: Angular components (via `HttpClient`) request data from the backend API endpoints (e.g., `/api/v1/timeline`).

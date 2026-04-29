@@ -1,11 +1,21 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { Polling } from './polling';
 
 describe('Polling', () => {
+  let httpMock: HttpTestingController;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Polling]
+      imports: [Polling],
+      providers: [provideHttpClient(), provideHttpClientTesting()]
     }).compileComponents();
+    httpMock = TestBed.inject(HttpTestingController);
+  });
+
+  afterEach(() => {
+    httpMock.verify();
   });
 
   it('should create', () => {
@@ -27,37 +37,36 @@ describe('Polling', () => {
     expect(component.isSearching()).toBe(false);
   });
 
-  it('should set searching state when address provided', () => {
+  it('should call API with zip code when searching', () => {
     const fixture = TestBed.createComponent(Polling);
     const component = fixture.componentInstance;
-    component.searchAddress.set('123 Main St, Springfield, IL');
+    component.searchAddress.set('123 Main St, Springfield, IL 62701');
     component.search();
     expect(component.isSearching()).toBe(true);
+
+    const req = httpMock.expectOne((r) => r.url.includes('/api/v1/polling'));
+    expect(req.request.method).toBe('GET');
+    req.flush({
+      success: true,
+      data: {
+        locations: [{ name: 'Test Location', address: '123 Test', hours: '6-7', distance: '1 mi', accessibility: ['Wheelchair'] }],
+        idRequirements: { state: 'Illinois', documents: ['State ID'] },
+        state: 'Illinois',
+        zip: '62701'
+      }
+    });
+
+    expect(component.results().length).toBe(1);
+    expect(component.idDocuments().length).toBe(1);
+    expect(component.stateName()).toBe('Illinois');
   });
 
-  it('should return results after search completes', async () => {
+  it('should handle typed input events', () => {
     const fixture = TestBed.createComponent(Polling);
     const component = fixture.componentInstance;
-    component.searchAddress.set('123 Main St, Springfield, IL');
-    component.search();
-
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    expect(component.hasSearched()).toBe(true);
-    expect(component.results().length).toBe(3);
-    expect(component.idDocuments().length).toBeGreaterThan(0);
-  });
-
-  it('should have accessibility info in results', async () => {
-    const fixture = TestBed.createComponent(Polling);
-    const component = fixture.componentInstance;
-    component.searchAddress.set('123 Main St');
-    component.search();
-
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    const results = component.results();
-    expect(results[0].accessibility.length).toBeGreaterThan(0);
+    const event = { target: { value: 'test address' } } as unknown as Event;
+    component.onAddressInput(event);
+    expect(component.searchAddress()).toBe('test address');
   });
 
   it('should render search input with accessibility', async () => {

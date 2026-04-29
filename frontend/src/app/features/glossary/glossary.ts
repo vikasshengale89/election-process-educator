@@ -1,12 +1,13 @@
-import { Component, ChangeDetectionStrategy, signal, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, computed, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TitleCasePipe } from '@angular/common';
+import { I18nService } from '../../core/services/i18n.service';
 
 interface GlossaryTerm {
-  term: string;
-  definition: string;
-  category: string;
-  emoji: string;
+  readonly term: string;
+  readonly definition: string;
+  readonly category: string;
+  readonly emoji: string;
 }
 
 @Component({
@@ -18,6 +19,7 @@ interface GlossaryTerm {
   styleUrl: './glossary.css'
 })
 export class Glossary {
+  readonly i18n = inject(I18nService);
   searchQuery = signal('');
   activeCategory = signal('all');
 
@@ -55,5 +57,10 @@ export class Glossary {
 
   setCategory(cat: string): void {
     this.activeCategory.set(cat);
+  }
+
+  onSearchInput(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.searchQuery.set(target.value);
   }
 }

@@ -28,13 +28,12 @@ describe('Timeline', () => {
     expect(filtered.length).toBeGreaterThan(0);
   });
 
-  it('should return correct type color', () => {
+  it('should return correct type class', () => {
     const fixture = TestBed.createComponent(Timeline);
     const component = fixture.componentInstance;
-    expect(component.getTypeColor('registration')).toBe('#3b82f6');
-    expect(component.getTypeColor('voting')).toBe('#10b981');
-    expect(component.getTypeColor('deadline')).toBe('#ef4444');
-    expect(component.getTypeColor('unknown')).toBe('#64748b');
+    expect(component.getTypeClass('registration')).toBe('type-registration');
+    expect(component.getTypeClass('voting')).toBe('type-voting');
+    expect(component.getTypeClass('deadline')).toBe('type-deadline');
   });
 
   it('should return correct type labels', () => {
@@ -50,5 +49,10 @@ describe('Timeline', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const filterGroup = compiled.querySelector('[role="group"]');
     expect(filterGroup).toBeTruthy();
+  });
+
+  it('should have i18n service injected', () => {
+    const fixture = TestBed.createComponent(Timeline);
+    expect(fixture.componentInstance.i18n).toBeTruthy();
   });
 });

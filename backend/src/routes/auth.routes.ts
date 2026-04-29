@@ -1,8 +1,10 @@
 import { Router } from 'express';
+import Joi from 'joi';
 import { getGoogleAuthClient } from '../config/google.config';
 import { envConfig } from '../config/env.config';
 import { v4 as uuidv4 } from 'uuid';
 import { logger } from '../utils/logger';
+import { validate } from '../middleware/validate.middleware';
 
 interface SessionData {
   userId: string;
@@ -29,12 +31,10 @@ router.get('/google', (_req, res) => {
   res.json({ url: authorizationUrl });
 });
 
-router.get('/google/callback', async (req, res) => {
-  const { code } = req.query;
-  if (!code || typeof code !== 'string') {
-    res.status(400).json({ error: 'Missing code parameter' });
-    return;
-  }
+const callbackSchema = Joi.object({ code: Joi.string().required() });
+
+router.get('/google/callback', validate(callbackSchema, 'query'), async (req, res) => {
+  const code = req.query.code as string;
 
   try {
     const authClient = getGoogleAuthClient();

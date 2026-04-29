@@ -1,25 +1,25 @@
-import { Component, ChangeDetectionStrategy, signal, computed } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, ChangeDetectionStrategy, signal, computed, inject } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
+import { I18nService } from '../../core/services/i18n.service';
 
 interface TimelineEvent {
-  date: string;
-  title: string;
-  description: string;
-  type: 'registration' | 'voting' | 'result' | 'deadline';
-  daysOut: number;
+  readonly date: string;
+  readonly title: string;
+  readonly description: string;
+  readonly type: 'registration' | 'voting' | 'result' | 'deadline';
+  readonly daysOut: number;
 }
 
 @Component({
   selector: 'app-timeline',
   standalone: true,
-  imports: [FormsModule, TitleCasePipe],
+  imports: [TitleCasePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './timeline.html',
   styleUrl: './timeline.css'
 })
 export class Timeline {
-  location = signal('');
+  readonly i18n = inject(I18nService);
   activeFilter = signal<string>('all');
 
   readonly filters = ['all', 'registration', 'voting', 'deadline', 'result'];
@@ -30,7 +30,7 @@ export class Timeline {
     { date: 'Oct 22, 2025', title: 'Absentee Ballot Request Deadline', description: 'Last day to request an absentee or mail-in ballot for the upcoming election.', type: 'deadline', daysOut: -75 },
     { date: 'Nov 1, 2025', title: 'Voter Registration Deadline', description: 'Last day to register to vote (most states). Some states allow same-day registration.', type: 'registration', daysOut: -65 },
     { date: 'Nov 4, 2025', title: 'Mail Ballots Must Be Postmarked', description: 'For mail-in voters, your ballot must be postmarked by this date to be counted.', type: 'deadline', daysOut: -62 },
-    { date: 'Nov 5, 2025', title: '🗳️ Election Day', description: 'Cast your ballot at your designated polling location between 6 AM and 8 PM local time. Bring your ID!', type: 'voting', daysOut: -61 },
+    { date: 'Nov 5, 2025', title: 'Election Day', description: 'Cast your ballot at your designated polling location between 6 AM and 8 PM local time. Bring your ID!', type: 'voting', daysOut: -61 },
     { date: 'Nov 6, 2025', title: 'Provisional Ballot Verification', description: 'Election officials begin verifying provisional and mail-in ballots.', type: 'result', daysOut: -60 },
     { date: 'Nov 19, 2025', title: 'Results Certified', description: 'All votes counted and results certified by the state election board.', type: 'result', daysOut: -47 },
   ];
@@ -44,14 +44,8 @@ export class Timeline {
     this.activeFilter.set(filter);
   }
 
-  getTypeColor(type: string): string {
-    const colors: Record<string, string> = {
-      registration: '#3b82f6',
-      voting: '#10b981',
-      deadline: '#ef4444',
-      result: '#8b5cf6'
-    };
-    return colors[type] ?? '#64748b';
+  getTypeClass(type: string): string {
+    return `type-${type}`;
   }
 
   getTypeLabel(type: string): string {

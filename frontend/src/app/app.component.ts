@@ -1,8 +1,9 @@
-import { Component, ChangeDetectionStrategy, HostListener, signal, inject, PLATFORM_ID, OnDestroy } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Component, ChangeDetectionStrategy, HostListener, signal, inject, PLATFORM_ID, OnDestroy, Renderer2 } from '@angular/core';
+import { isPlatformBrowser, DOCUMENT } from '@angular/common';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { AuthService } from './auth';
+import { I18nService } from './core/services/i18n.service';
 import { filter } from 'rxjs';
 
 @Component({
@@ -22,10 +23,14 @@ export class AppComponent implements OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly i18n = inject(I18nService);
+  private readonly renderer = inject(Renderer2);
+  private readonly document = inject(DOCUMENT);
 
   constructor() {
     if (isPlatformBrowser(this.platformId)) {
       this.resetIdleTimer();
+      this.updateDocLang();
     }
 
     this.router.events.pipe(
@@ -37,6 +42,7 @@ export class AppComponent implements OnDestroy {
         this.isIdle.set(false);
       }
       this.resetIdleTimer();
+      this.updateDocLang();
     });
   }
 
@@ -50,6 +56,11 @@ export class AppComponent implements OnDestroy {
       this.isIdle.set(false);
     }
     this.resetIdleTimer();
+  }
+
+  private updateDocLang(): void {
+    const lang = this.i18n.currentLang();
+    this.renderer.setAttribute(this.document.documentElement, 'lang', lang);
   }
 
   private resetIdleTimer(): void {
