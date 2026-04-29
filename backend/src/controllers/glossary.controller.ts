@@ -19,7 +19,7 @@ const glossaryTerms = [
   { term: 'Recall Election', definition: 'A special election that allows voters to remove an elected official from office before their term expires.', category: 'process', emoji: '🔴' },
 ];
 
-export const getGlossary = (req: Request, res: Response, next: NextFunction) => {
+export const getGlossary = (_req: Request, res: Response, next: NextFunction) => {
   try {
     res.json({ success: true, data: glossaryTerms });
   } catch (error) {

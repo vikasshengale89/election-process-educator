@@ -1,20 +1,26 @@
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
 @if (showNavbar()) {
   <app-navbar></app-navbar>
 }
 
-<a class="skip-link" href="#main-content">Skip to main content</a>
-
-<main id="main-content" class="container" role="main">
+<main id="main-content" class="container" role="main" aria-label="Main content">
   <router-outlet></router-outlet>
 </main>
 
 @if (isIdle()) {
-  <div class="idle-overlay" role="status" aria-live="polite" aria-label="Screensaver mode active. Move mouse or press any key to continue.">
+  <div
+    class="idle-overlay"
+    role="status"
+    aria-live="polite"
+    aria-label="Screensaver active"
+    (click)="onUserInteraction()"
+    (keydown)="onUserInteraction()">
     <div class="idle-particles" aria-hidden="true"></div>
     <div class="idle-content">
       <div class="idle-icon" aria-hidden="true">🗳️</div>
       <h2>Your Vote Matters</h2>
-      <p class="idle-hint">Move mouse or press any key to continue</p>
+      <p class="idle-hint">Click or press any key to continue</p>
     </div>
   </div>
 }

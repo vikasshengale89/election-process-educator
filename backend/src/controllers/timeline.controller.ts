@@ -11,7 +11,7 @@ const timelineEvents = [
   { date: 'Nov 19, 2025', title: 'Results Certified', description: 'All votes counted and results certified by the state election board.', type: 'result', daysOut: -47 },
 ];
 
-export const getTimeline = (req: Request, res: Response, next: NextFunction) => {
+export const getTimeline = (_req: Request, res: Response, next: NextFunction) => {
   try {
     res.json({ success: true, data: timelineEvents });
   } catch (error) {

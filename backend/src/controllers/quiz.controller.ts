@@ -72,7 +72,7 @@ const questions = [
   },
 ];
 
-export const getQuiz = (req: Request, res: Response, next: NextFunction) => {
+export const getQuiz = (_req: Request, res: Response, next: NextFunction) => {
   try {
     res.json({ success: true, data: questions });
   } catch (error) {

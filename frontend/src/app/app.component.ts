@@ -1,8 +1,9 @@
-import { Component, ChangeDetectionStrategy, HostListener, signal, inject, PLATFORM_ID, OnDestroy, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, HostListener, signal, inject, PLATFORM_ID, OnDestroy } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { AuthService } from './auth';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -12,38 +13,51 @@ import { AuthService } from './auth';
   styleUrl: './app.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnDestroy {
   isIdle = signal(false);
   showNavbar = signal(false);
 
   private idleTimeout: ReturnType<typeof setTimeout> | null = null;
-  private readonly IDLE_TIME_MS = 30_000;
+  private readonly IDLE_TIME_MS = 60_000;
   private readonly platformId = inject(PLATFORM_ID);
   private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
-  ngOnInit(): void {
-    this.showNavbar.set(this.authService.isLoggedIn());
+  constructor() {
     if (isPlatformBrowser(this.platformId)) {
       this.resetIdleTimer();
     }
+
+    this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+    ).subscribe(event => {
+      const isLoginRoute = event.urlAfterRedirects.startsWith('/login');
+      this.showNavbar.set(!isLoginRoute && this.authService.isLoggedIn());
+      if (this.isIdle()) {
+        this.isIdle.set(false);
+      }
+      this.resetIdleTimer();
+    });
   }
 
   @HostListener('window:mousemove')
   @HostListener('window:keydown')
   @HostListener('window:click')
   @HostListener('window:scroll')
+  @HostListener('window:touchstart')
   onUserInteraction(): void {
     if (this.isIdle()) {
       this.isIdle.set(false);
     }
     this.resetIdleTimer();
-    this.showNavbar.set(this.authService.isLoggedIn());
   }
 
   private resetIdleTimer(): void {
     if (this.idleTimeout !== null) {
       clearTimeout(this.idleTimeout);
     }
+    if (!this.authService.isLoggedIn()) return;
+
     this.idleTimeout = setTimeout(() => {
       this.isIdle.set(true);
     }, this.IDLE_TIME_MS);

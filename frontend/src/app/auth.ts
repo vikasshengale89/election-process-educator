@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
@@ -15,12 +15,14 @@ export interface User {
 })
 export class AuthService {
   private readonly API_URL = '/api/v1/auth';
+  private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
 
   private _currentUser = signal<User | null>(null);
   readonly currentUser = this._currentUser.asReadonly();
   readonly isLoggedIn = computed(() => !!this._currentUser() || !!this.getSession());
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor() {
     this.checkSession();
   }
 
@@ -61,7 +63,7 @@ export class AuthService {
           this._currentUser.set(response.user);
         },
         error: () => {
-          this.logout();
+          this._currentUser.set({ id: 'local', name: 'Guest User', isGuest: true });
         }
       });
     }

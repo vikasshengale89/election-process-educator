@@ -1,21 +1,20 @@
 <section class="hero" aria-labelledby="hero-heading">
-  <div class="hero-badge">🗳️ Your Democracy Companion</div>
-  <h1 id="hero-heading">Demystifying<br><span class="gradient-text">Democracy</span></h1>
+  <div class="hero-badge" aria-hidden="true">🗳️ {{ i18n.t('home.badge') }}</div>
+  <h1 id="hero-heading">{{ i18n.t('home.title') }}<br><span class="gradient-text">{{ i18n.t('home.titleHighlight') }}</span></h1>
   <p class="hero-sub">
-    Clear, step-by-step guidance through voter registration, election timelines, and polling procedures.
-    Every citizen deserves to vote with confidence.
+    {{ i18n.t('home.subtitle') }}
   </p>
   <div class="hero-actions">
     <a routerLink="/wizard" class="btn-primary" aria-label="Start the voter registration wizard">
-      Get Started →
+      {{ i18n.t('home.cta') }} →
     </a>
     <a routerLink="/timeline" class="btn-outline" aria-label="View the election timeline">
-      View Timeline
+      {{ i18n.t('home.viewTimeline') }}
     </a>
   </div>
 </section>
 
-<section class="stats-row" aria-label="App statistics">
+<section class="stats-row" aria-label="Application statistics">
   @for (stat of stats; track stat.label) {
     <div class="stat-card glass-panel">
       <div class="stat-value">{{ stat.value }}</div>
@@ -25,7 +24,7 @@
 </section>
 
 <section aria-labelledby="features-heading">
-  <h2 id="features-heading" class="section-title">Everything You Need</h2>
+  <h2 id="features-heading" class="section-title">{{ i18n.t('home.features') }}</h2>
   <div class="features-grid" role="list">
     @for (feature of features; track feature.route) {
       <article class="feature-card glass-panel" role="listitem">
@@ -38,4 +37,18 @@
       </article>
     }
   </div>
+</section>
+
+<section class="reminders-banner glass-panel" aria-labelledby="reminders-heading">
+  <div class="reminder-content">
+    <h3 id="reminders-heading">🔔 {{ i18n.t('notifications.title') }}</h3>
+    <p>{{ i18n.t('notifications.subtitle') }}</p>
+  </div>
+  <button
+    class="btn-primary"
+    (click)="enableReminders()"
+    [disabled]="notifications.isEnabled()"
+    [attr.aria-label]="notifications.isEnabled() ? 'Notifications already enabled' : 'Enable election deadline notifications'">
+    {{ notifications.isEnabled() ? '✅ ' + i18n.t('notifications.enabled') : i18n.t('notifications.enable') }}
+  </button>
 </section>
