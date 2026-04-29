@@ -1,0 +1,20 @@
+import { Request, Response, NextFunction } from 'express';
+
+const timelineEvents = [
+  { date: 'Oct 7, 2025', title: 'Voter Registration Opens', description: 'Online and mail-in voter registration portals open for the upcoming election cycle.', type: 'registration', daysOut: -90 },
+  { date: 'Oct 15, 2025', title: 'Early Voting Begins', description: 'Early voting locations open. Check your local election office for specific sites and hours.', type: 'voting', daysOut: -82 },
+  { date: 'Oct 22, 2025', title: 'Absentee Ballot Request Deadline', description: 'Last day to request an absentee or mail-in ballot for the upcoming election.', type: 'deadline', daysOut: -75 },
+  { date: 'Nov 1, 2025', title: 'Voter Registration Deadline', description: 'Last day to register to vote (most states). Some states allow same-day registration.', type: 'registration', daysOut: -65 },
+  { date: 'Nov 4, 2025', title: 'Mail Ballots Must Be Postmarked', description: 'For mail-in voters, your ballot must be postmarked by this date to be counted.', type: 'deadline', daysOut: -62 },
+  { date: 'Nov 5, 2025', title: '🗳️ Election Day', description: 'Cast your ballot at your designated polling location between 6 AM and 8 PM local time. Bring your ID!', type: 'voting', daysOut: -61 },
+  { date: 'Nov 6, 2025', title: 'Provisional Ballot Verification', description: 'Election officials begin verifying provisional and mail-in ballots.', type: 'result', daysOut: -60 },
+  { date: 'Nov 19, 2025', title: 'Results Certified', description: 'All votes counted and results certified by the state election board.', type: 'result', daysOut: -47 },
+];
+
+export const getTimeline = (req: Request, res: Response, next: NextFunction) => {
+  try {
+    res.json({ success: true, data: timelineEvents });
+  } catch (error) {
+    next(error);
+  }
+};

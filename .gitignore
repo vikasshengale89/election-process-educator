@@ -1,0 +1,92 @@
+# === Dependencies ===
+node_modules/
+.pnp/
+.pnp.js
+package-lock.json
+
+# === Build Output ===
+dist/
+build/
+out/
+target/
+*.class
+*.jar
+*.war
+*.ear
+.angular/
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.eggs/
+venv/
+.venv/
+env/
+
+# === Environment & Secrets ===
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+credentials.json
+serviceAccountKey.json
+.firebase/
+
+# === Firebase ===
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+database-debug.log
+
+# === IDE & Cursor ===
+.idea/
+*.iml
+.vscode/
+.cursor/
+.context/
+*.swp
+*.swo
+*~
+
+# === OS ===
+.DS_Store
+Thumbs.db
+
+# === Setup & Template Files ===
+*.template.ts
+*.template.java
+*.template.py
+*.template.xml
+*.template.json
+*.template.yml
+*.template.properties
+*.template.txt
+
+# === Logs ===
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# === Testing ===
+coverage/
+.nyc_output/
+htmlcov/
+.pytest_cache/
+.tox/
+
+# === Misc ===
+*.tmp
+*.temp
+.cache/
+*.bak
+*.orig
+
+# === Deploy Keys ===
+.deploy_key
+.deploy_key.pub

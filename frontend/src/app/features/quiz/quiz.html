@@ -1,0 +1,77 @@
+<div class="quiz-page">
+  <div class="page-header">
+    <h1>🧠 Election Knowledge Quiz</h1>
+    <p>Test how ready you are for the ballot box. {{ totalQuestions }} questions.</p>
+  </div>
+
+  @if (!isComplete()) {
+    <!-- Progress -->
+    <div class="glass-panel progress-wrap"
+         role="progressbar"
+         [attr.aria-valuenow]="currentIndex() + 1"
+         [attr.aria-valuemin]="1"
+         [attr.aria-valuemax]="totalQuestions"
+         [attr.aria-label]="'Question ' + (currentIndex() + 1) + ' of ' + totalQuestions">
+      <div class="progress-labels">
+        <span>Question {{ currentIndex() + 1 }} / {{ totalQuestions }}</span>
+        <span class="score-pill">Score: {{ score() }}/{{ currentIndex() }}</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" [style.width.%]="progressPct()"></div>
+      </div>
+    </div>
+
+    <!-- Question -->
+    <div class="glass-panel question-card">
+      <p class="question-text">{{ currentQuestion().question }}</p>
+
+      <div class="options-list" role="radiogroup" [attr.aria-label]="currentQuestion().question">
+        @for (option of currentQuestion().options; track option; let i = $index) {
+          <button
+            class="option-btn"
+            [class]="getOptionClass(i)"
+            (click)="selectAnswer(i)"
+            [disabled]="selectedAnswer() !== null"
+            role="radio"
+            [attr.aria-checked]="selectedAnswer() === i"
+            [attr.aria-label]="option">
+            <span class="option-letter" aria-hidden="true">{{ 'ABCD'[i] }}</span>
+            {{ option }}
+          </button>
+        }
+      </div>
+
+      @if (selectedAnswer() !== null) {
+        <div class="explanation" [class.correct-bg]="answeredCorrectly()" [class.wrong-bg]="!answeredCorrectly()" role="alert" aria-live="polite">
+          <strong>{{ answeredCorrectly() ? '✅ Correct!' : '❌ Not quite.' }}</strong>
+          <p>{{ currentQuestion().explanation }}</p>
+        </div>
+        <button class="btn-primary next-btn" (click)="nextQuestion()" aria-label="{{ currentIndex() < totalQuestions - 1 ? 'Next question' : 'See results' }}">
+          {{ currentIndex() < totalQuestions - 1 ? 'Next Question →' : 'See Results 🎉' }}
+        </button>
+      }
+    </div>
+  }
+
+  @if (isComplete()) {
+    <div class="glass-panel results-card" role="region" aria-label="Quiz results">
+      <div class="results-score" [style.color]="grade().color">
+        <span class="big-score">{{ score() }}/{{ totalQuestions }}</span>
+        <span class="score-pct">({{ scorePercent() }}%)</span>
+      </div>
+      <h2 [style.color]="grade().color">{{ grade().label }}</h2>
+      <p class="results-msg">
+        @if (scorePercent() >= 70) {
+          You're well-prepared for the ballot box! Keep up the great civic knowledge.
+        } @else {
+          Don't worry — visit our <strong>Glossary</strong> and <strong>Timeline</strong> pages to brush up, then try again!
+        }
+      </p>
+      <div class="results-actions">
+        <button class="btn-primary" (click)="restart()" aria-label="Retake the quiz">
+          Retake Quiz 🔄
+        </button>
+      </div>
+    </div>
+  }
+</div>

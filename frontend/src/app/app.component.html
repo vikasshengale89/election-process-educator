@@ -1,0 +1,18 @@
+<app-navbar></app-navbar>
+
+<main class="container">
+  <router-outlet></router-outlet>
+</main>
+
+@if (isIdle()) {
+  <div class="idle-overlay" aria-hidden="true">
+    <div id="particles-js"></div>
+    <div class="idle-content">
+      <h2>Next Major Election Event</h2>
+      <div class="countdown">
+        <span>14</span> days <span>08</span> hours <span>45</span> minutes
+      </div>
+      <p>Move mouse or press any key to continue</p>
+    </div>
+  </div>
+}

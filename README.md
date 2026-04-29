@@ -1,73 +1,46 @@
-# Angular Project Template
+# Election Process Educator 🗳️
 
-Standalone Angular 19+ with zoneless change detection, signals, and OnPush.
+An interactive AI guide to demystifying democracy. This assistant provides clear, step-by-step navigation through election timelines, voter registration, and polling procedures. Designed to replace complex jargon with easy-to-follow, personalized paths, it ensures every citizen feels confident and informed on their journey to the ballot box.
 
-## Quick Setup
+**Submission for Google Antigravity PromptWars Hackathon**
 
-```bash
-# From project directory:
-ng new frontend --standalone --style=css --routing
-cd frontend
+## Features 🚀
 
-# Replace app.config.ts with app.config.template.ts content
-# Replace app.routes.ts with app.routes.template.ts content
-# Copy environment files to src/environments/
-# Copy proxy.conf.json for API proxying
+*   **Voter Registration Wizard:** A personalized, interactive questionnaire that assesses readiness and generates a customized voting checklist.
+*   **Election Timeline:** An interactive chronological track of vital deadlines, helping users stay ahead of registration and voting dates.
+*   **Glossary:** A jargon-free dictionary translating complex political terms (like Gerrymandering, Electoral College, etc.) into plain language.
+*   **Knowledge Quiz:** A fun, engaging 7-question test to evaluate the user's democratic knowledge and confidence.
+*   **WOW Factor Idle Screen:** An ambient countdown timer powered by an interactive particle background that activates during inactivity.
 
-# Install transloco for i18n (if needed):
-ng add @ngneat/transloco
+## Tech Stack 🛠️
 
-# Start dev server with proxy:
-ng serve --proxy-config proxy.conf.json
-```
+*   **Frontend:** Angular 19 (Standalone components, Zoneless change detection with Signals, `OnPush` strategy).
+*   **Backend:** Node.js, Express, TypeScript (Secure headers via Helmet, organized controllers).
+*   **Deployment:** Firebase Hosting (Spark Plan - completely free tier).
+*   **Styling:** Custom CSS variables enabling a premium Glassmorphism UI (frosted glass, dynamic mesh gradients, smooth transitions). No external component libraries used.
 
-## Project Structure
+## Security & Accessibility 🔒
+*   **Security:** 100% Score target. Implements Helmet, CORS protection, parameter validation, and environment variables. Secrets are isolated and git-ignored.
+*   **Accessibility:** 100% Score target. Built to WCAG 2.1 AA standards, featuring semantic HTML structure, ARIA labels, keyboard focus management, and high contrast text ratios.
 
-```
-frontend/
-├── src/
-│   ├── app/
-│   │   ├── core/           # Services, guards, interceptors
-│   │   ├── features/       # Feature modules (lazy-loaded)
-│   │   ├── shared/         # Shared components, directives, pipes
-│   │   ├── app.component.ts
-│   │   ├── app.config.ts
-│   │   └── app.routes.ts
-│   ├── assets/
-│   │   ├── i18n/           # Translation files (en.json, es.json, etc.)
-│   │   └── themes/         # theme.json for dynamic theming
-│   ├── environments/
-│   │   ├── environment.ts
-│   │   └── environment.prod.ts
-│   └── styles.css          # Import shared/styles/theme-variables.css
-├── proxy.conf.json
-├── .env.example
-└── angular.json
-```
+## Local Development 💻
 
-## Environment Setup
+1. **Install Dependencies:**
+   ```bash
+   cd frontend && npm install
+   cd ../backend && npm install
+   ```
 
-```bash
-cp .env.example .env
-```
+2. **Run Backend Server:**
+   ```bash
+   cd backend && npm run dev
+   ```
 
-## Conventions
+3. **Run Frontend Application:**
+   ```bash
+   cd frontend && npm start
+   ```
+   Navigate to `http://localhost:4200/`.
 
-- All components: `standalone: true`, `ChangeDetectionStrategy.OnPush`
-- State: `signal()`, `computed()` — no BehaviorSubject
-- Inputs: `input.required<T>()` / Outputs: `output<T>()`
-- Styling: CSS variables only (import shared/styles/theme-variables.css)
-- Lazy load all feature routes via `loadComponent`
-- Zoneless change detection via `provideExperimentalZonelessChangeDetection()`
-- Secrets never in frontend code — use environment files for config only
-
-## Template Files
-
-| File | Purpose |
-|------|---------|
-| `app.config.template.ts` | Application config with zoneless CD |
-| `app.routes.template.ts` | Route config with lazy loading |
-| `environment.template.ts` | Dev environment config |
-| `environment.prod.template.ts` | Production environment config |
-| `proxy.conf.template.json` | API proxy config for dev server |
-| `.env.example` | Environment variable template |
+## Author
+Developed by Vikas for Google Antigravity.

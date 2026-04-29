@@ -1,0 +1,41 @@
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="hero-badge">🗳️ Your Democracy Companion</div>
+  <h1 id="hero-heading">Demystifying<br><span class="gradient-text">Democracy</span></h1>
+  <p class="hero-sub">
+    Clear, step-by-step guidance through voter registration, election timelines, and polling procedures.
+    Every citizen deserves to vote with confidence.
+  </p>
+  <div class="hero-actions">
+    <a routerLink="/wizard" class="btn-primary" aria-label="Start the voter registration wizard">
+      Get Started →
+    </a>
+    <a routerLink="/timeline" class="btn-outline" aria-label="View the election timeline">
+      View Timeline
+    </a>
+  </div>
+</section>
+
+<section class="stats-row" aria-label="App statistics">
+  @for (stat of stats; track stat.label) {
+    <div class="stat-card glass-panel">
+      <div class="stat-value">{{ stat.value }}</div>
+      <div class="stat-label">{{ stat.label }}</div>
+    </div>
+  }
+</section>
+
+<section aria-labelledby="features-heading">
+  <h2 id="features-heading" class="section-title">Everything You Need</h2>
+  <div class="features-grid" role="list">
+    @for (feature of features; track feature.route) {
+      <article class="feature-card glass-panel" role="listitem">
+        <div class="feature-icon" [style.color]="feature.color" aria-hidden="true">{{ feature.icon }}</div>
+        <h3>{{ feature.title }}</h3>
+        <p>{{ feature.description }}</p>
+        <a [routerLink]="feature.route" class="btn-primary feature-cta" [attr.aria-label]="feature.cta + ' — ' + feature.title">
+          {{ feature.cta }} →
+        </a>
+      </article>
+    }
+  </div>
+</section>

@@ -1,0 +1,27 @@
+<nav class="navbar glass-panel" role="navigation" aria-label="Main navigation">
+  <a class="navbar-brand" routerLink="/" aria-label="Election Process Educator Home">
+    <span aria-hidden="true">🗳️</span> Democracy Guide
+  </a>
+
+  <button
+    class="nav-toggle"
+    (click)="toggleMenu()"
+    [attr.aria-expanded]="isMenuOpen()"
+    aria-controls="nav-links"
+    aria-label="Toggle navigation menu">
+    <span></span><span></span><span></span>
+  </button>
+
+  <ul id="nav-links" class="nav-links" [class.open]="isMenuOpen()" role="list">
+    <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="isMenuOpen.set(false)">Home</a></li>
+    <li><a routerLink="/wizard" routerLinkActive="active" (click)="isMenuOpen.set(false)">📋 Wizard</a></li>
+    <li><a routerLink="/timeline" routerLinkActive="active" (click)="isMenuOpen.set(false)">📅 Timeline</a></li>
+    <li><a routerLink="/glossary" routerLinkActive="active" (click)="isMenuOpen.set(false)">📖 Glossary</a></li>
+    <li><a routerLink="/quiz" routerLinkActive="active" (click)="isMenuOpen.set(false)">🧠 Quiz</a></li>
+    <li>
+      <button class="btn-logout" (click)="logout()" aria-label="Log out">
+        {{ currentUser ? currentUser.name.split(' ')[0] : 'Guest' }} · Logout
+      </button>
+    </li>
+  </ul>
+</nav>
