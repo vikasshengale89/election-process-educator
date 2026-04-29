@@ -2,7 +2,7 @@
 
 ## Architecture Overview
 
-- **Frontend:** Angular 21 SPA with standalone components, zoneless change detection, signal-based state management, and OnPush strategy
+- **Frontend:** Angular SPA with standalone components, zoneless change detection, signal-based state management, and OnPush strategy
 - **Backend:** Node.js / Express REST API with TypeScript strict mode, Helmet security headers, CORS middleware, and Joi input validation
 - **Deployment:** Firebase Hosting (Spark Plan — free tier, static files only)
 - **Auth:** Google Identity Services (client-side OAuth) + Guest login fallback

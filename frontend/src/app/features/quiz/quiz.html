@@ -13,7 +13,7 @@
          [attr.aria-label]="i18n.t('quiz.question') + ' ' + (currentIndex() + 1) + ' / ' + totalQuestions">
       <div class="progress-labels">
         <span>{{ i18n.t('quiz.question') }} {{ currentIndex() + 1 }} / {{ totalQuestions }}</span>
-        <span class="score-pill">{{ i18n.t('quiz.score') }}: {{ score() }}/{{ currentIndex() }}</span>
+        <span class="score-pill">{{ i18n.t('quiz.score') }}: {{ score() }}/{{ currentIndex() + (selectedAnswer() !== null ? 1 : 0) }}</span>
       </div>
       <div class="progress-track">
         <div class="progress-fill" [style.width.%]="progressPct()"></div>
@@ -21,7 +21,7 @@
     </div>
 
     <div class="glass-panel question-card">
-      <p class="question-text">{{ currentQuestion().question }}</p>
+      <h2 class="question-text">{{ currentQuestion().question }}</h2>
 
       <div class="options-list" role="radiogroup" [attr.aria-label]="currentQuestion().question">
         @for (option of currentQuestion().options; track option; let i = $index) {

@@ -28,18 +28,18 @@ An interactive AI guide to demystifying democracy. This assistant provides clear
 
 ## Tech Stack
 
-- **Frontend:** Angular 19 — Standalone components, Zoneless change detection, Signal-based state, OnPush strategy
-- **Backend:** Node.js, Express, TypeScript — Helmet, CORS, Joi validation, structured logging
+- **Frontend:** Angular (Standalone components, Zoneless change detection, Signal-based state, OnPush strategy, ESLint)
+- **Backend:** Node.js, Express, TypeScript — Helmet, CORS, Joi validation, rate limiting, structured logging
 - **Deployment:** Firebase Hosting (Spark Plan — completely free tier)
 - **Styling:** Custom CSS variables only — Glassmorphism UI with frosted glass, mesh gradients, smooth transitions
 
 ## Quality Metrics
 
-- **115+ unit tests** passing across 16+ test files
+- **140+ unit tests** passing across 23 test files (frontend + backend)
 - **Zero linter errors** — strict TypeScript, no `any` types
 - **100 KB** production transfer size (loads in < 1 second)
 - **WCAG 2.1 AA** compliant — skip links, ARIA labels, keyboard navigation, high contrast, `prefers-reduced-motion`
-- **Security** — No hardcoded secrets, Helmet headers, CORS allowlist, Joi input validation, XSS protection via Angular sanitization
+- **Security** — Helmet headers, CORS allowlist, Joi input validation, rate limiting, CSP/HSTS/XSS headers, XSS protection via Angular sanitization. Public client IDs (OAuth, reCAPTCHA) in environment files; server secrets in `.env` only.
 - **All routes lazy-loaded** with `loadComponent()`
 
 ## Local Development
@@ -76,7 +76,7 @@ An interactive AI guide to demystifying democracy. This assistant provides clear
 
 - [x] Angular Frontend with Glassmorphism UI
 - [x] Node.js Express Backend API
-- [x] Unit Tests Passing (115+ tests, 16+ files)
+- [x] Unit Tests Passing (140+ tests, 23 files)
 - [x] Requirements Document (requirements.md)
 - [x] Implementation Plan (implementation_plan.md)
 - [x] Flow Document (FLOW.md)
