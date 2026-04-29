@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy, signal, computed } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, ChangeDetectionStrategy, signal, computed, inject } from '@angular/core';
+import { I18nService } from '../../core/services/i18n.service';
 
 interface WizardStep {
   id: number;
@@ -17,6 +17,7 @@ interface WizardStep {
   styleUrl: './wizard.css'
 })
 export class Wizard {
+  readonly i18n = inject(I18nService);
   currentStep = signal(0);
   answers = signal<Record<string, string>>({});
   isComplete = signal(false);

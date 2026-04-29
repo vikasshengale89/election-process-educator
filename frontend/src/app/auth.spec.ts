@@ -10,65 +10,87 @@ describe('AuthService', () => {
 
   beforeEach(() => {
     localStorage.clear();
-
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([{ path: 'login', children: [] }]),
-        AuthService
+        provideRouter([
+          { path: 'login', component: class {} as never }
+        ])
       ]
     });
-
     service = TestBed.inject(AuthService);
     httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {
     httpMock.verify();
+    localStorage.clear();
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should not be logged in initially', () => {
-    expect(service.getSession()).toBeNull();
-  });
-
-  it('should login as guest and set session', () => {
-    const mockResponse = { session_id: 'guest_123', user: { id: '1', name: 'Guest', email: undefined, isGuest: true } };
-
-    service.loginAsGuest().subscribe(res => {
-      expect(res.session_id).toBe('guest_123');
-      expect(service.getSession()).toBe('guest_123');
-      expect(service.currentUser()?.isGuest).toBe(true);
-    });
-
-    const req = httpMock.expectOne('/api/v1/auth/guest');
-    expect(req.request.method).toBe('POST');
-    req.flush(mockResponse);
-  });
-
-  it('should logout and clear session', () => {
-    localStorage.setItem('session_id', 'test_session');
-    service.logout();
-    expect(service.getSession()).toBeNull();
+  it('should start logged out with no session', () => {
     expect(service.currentUser()).toBeNull();
   });
 
   it('should set and get session', () => {
-    service.setSession('abc-123');
-    expect(service.getSession()).toBe('abc-123');
+    service.setSession('test-session');
+    expect(service.getSession()).toBe('test-session');
   });
 
-  it('should fetch Google auth URL', () => {
-    service.getGoogleAuthUrl().subscribe(res => {
-      expect(res.url).toContain('https://');
-    });
+  it('should set current user and persist', () => {
+    service.setCurrentUser({ id: '1', name: 'Test', isGuest: false });
+    expect(service.currentUser()?.name).toBe('Test');
+    expect(localStorage.getItem('user_data')).toBeTruthy();
+  });
 
-    const req = httpMock.expectOne('/api/v1/auth/google');
-    expect(req.request.method).toBe('GET');
-    req.flush({ url: 'https://accounts.google.com/o/oauth2/auth' });
+  it('should report logged in when session exists', () => {
+    service.setSession('test');
+    expect(service.isLoggedIn()).toBe(true);
+  });
+
+  it('should clear session on logout', () => {
+    service.setSession('test');
+    service.setCurrentUser({ id: '1', name: 'Test', isGuest: false });
+    service.logout();
+    expect(service.getSession()).toBeNull();
+    expect(service.currentUser()).toBeNull();
+    expect(localStorage.getItem('user_data')).toBeNull();
+  });
+
+  it('should return google client id', () => {
+    const clientId = service.getGoogleClientId();
+    expect(clientId).toBeTruthy();
+    expect(clientId).toContain('.apps.googleusercontent.com');
+  });
+
+  it('should login as guest with fallback', () => {
+    service.loginAsGuest().subscribe(response => {
+      expect(response.user.isGuest).toBe(true);
+      expect(service.isLoggedIn()).toBe(true);
+    });
+    const req = httpMock.expectOne('/api/v1/auth/guest');
+    expect(req.request.method).toBe('POST');
+    req.error(new ProgressEvent('error'));
+  });
+
+  it('should login as guest via backend', () => {
+    service.loginAsGuest().subscribe(response => {
+      expect(response.user.isGuest).toBe(true);
+    });
+    const req = httpMock.expectOne('/api/v1/auth/guest');
+    req.flush({ session_id: 'guest-1', user: { id: 'g1', name: 'Guest User', isGuest: true } });
+    expect(service.currentUser()?.name).toBe('Guest User');
+  });
+
+  it('should restore session from localStorage', () => {
+    localStorage.setItem('session_id', 'saved-session');
+    localStorage.setItem('user_data', JSON.stringify({ id: '1', name: 'Saved User', isGuest: false }));
+
+    const freshService = TestBed.inject(AuthService);
+    expect(freshService.isLoggedIn()).toBe(true);
   });
 });

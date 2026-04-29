@@ -74,6 +74,20 @@
   height: 20px;
 }
 
+.google-btn-container {
+  display: flex;
+  justify-content: center;
+  min-height: 44px;
+}
+
+.btn-google-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  opacity: 0.5;
+}
+
 .divider {
   position: relative;
   text-align: center;

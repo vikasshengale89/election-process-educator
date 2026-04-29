@@ -1,0 +1,4 @@
+{
+  "session_id": "static-guest-session",
+  "user": { "id": "static-guest", "name": "Guest User", "isGuest": true }
+}

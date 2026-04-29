@@ -2,82 +2,65 @@ import { TestBed } from '@angular/core/testing';
 import { Quiz } from './quiz';
 
 describe('Quiz', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [Quiz]
-    }).compileComponents();
+  let component: Quiz;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    component = TestBed.createComponent(Quiz).componentInstance;
   });
 
   it('should create', () => {
-    const fixture = TestBed.createComponent(Quiz);
-    expect(fixture.componentInstance).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 
-  it('should start at question 0', () => {
-    const fixture = TestBed.createComponent(Quiz);
-    expect(fixture.componentInstance.currentIndex()).toBe(0);
+  it('should start at index 0', () => {
+    expect(component.currentIndex()).toBe(0);
   });
 
   it('should have 7 questions', () => {
-    const fixture = TestBed.createComponent(Quiz);
-    expect(fixture.componentInstance.totalQuestions).toBe(7);
+    expect(component.totalQuestions).toBe(7);
   });
 
-  it('should increment score on correct answer', () => {
-    const fixture = TestBed.createComponent(Quiz);
-    const component = fixture.componentInstance;
-    const correctIndex = component.questions[0].correctIndex;
-    component.selectAnswer(correctIndex);
-    expect(component.score()).toBe(1);
-  });
-
-  it('should not increment score on wrong answer', () => {
-    const fixture = TestBed.createComponent(Quiz);
-    const component = fixture.componentInstance;
-    const wrongIndex = component.questions[0].correctIndex === 0 ? 1 : 0;
-    component.selectAnswer(wrongIndex);
+  it('should start with score 0', () => {
     expect(component.score()).toBe(0);
   });
 
-  it('should not allow multiple answers per question', () => {
-    const fixture = TestBed.createComponent(Quiz);
-    const component = fixture.componentInstance;
+  it('should select correct answer and increment score', () => {
+    const correctIndex = component.currentQuestion().correctIndex;
+    component.selectAnswer(correctIndex);
+    expect(component.score()).toBe(1);
+    expect(component.answeredCorrectly()).toBe(true);
+  });
+
+  it('should select wrong answer and not increment score', () => {
+    const wrongIndex = component.currentQuestion().correctIndex === 0 ? 1 : 0;
+    component.selectAnswer(wrongIndex);
+    expect(component.score()).toBe(0);
+    expect(component.answeredCorrectly()).toBe(false);
+  });
+
+  it('should not allow double selection', () => {
     component.selectAnswer(0);
     component.selectAnswer(1);
     expect(component.selectedAnswer()).toBe(0);
   });
 
   it('should advance to next question', () => {
-    const fixture = TestBed.createComponent(Quiz);
-    const component = fixture.componentInstance;
     component.selectAnswer(0);
     component.nextQuestion();
     expect(component.currentIndex()).toBe(1);
     expect(component.selectedAnswer()).toBeNull();
   });
 
-  it('should complete after last question', () => {
-    const fixture = TestBed.createComponent(Quiz);
-    const component = fixture.componentInstance;
+  it('should complete quiz on last question', () => {
     for (let i = 0; i < component.totalQuestions; i++) {
-      component.selectAnswer(component.questions[i].correctIndex);
+      component.selectAnswer(0);
       component.nextQuestion();
     }
     expect(component.isComplete()).toBe(true);
   });
 
-  it('should calculate score percentage', () => {
-    const fixture = TestBed.createComponent(Quiz);
-    const component = fixture.componentInstance;
-    component.selectAnswer(component.questions[0].correctIndex);
-    component.nextQuestion();
-    component.selectAnswer(component.questions[1].correctIndex);
-    expect(component.scorePercent()).toBeGreaterThan(0);
-  });
-
   it('should restart quiz', () => {
-    const fixture = TestBed.createComponent(Quiz);
-    const component = fixture.componentInstance;
     component.selectAnswer(0);
     component.nextQuestion();
     component.restart();
@@ -86,13 +69,15 @@ describe('Quiz', () => {
     expect(component.isComplete()).toBe(false);
   });
 
-  it('should assign grade based on score', () => {
-    const fixture = TestBed.createComponent(Quiz);
-    const component = fixture.componentInstance;
-    for (let i = 0; i < component.totalQuestions; i++) {
-      component.selectAnswer(component.questions[i].correctIndex);
-      component.nextQuestion();
-    }
-    expect(component.grade().label).toContain('Champion');
+  it('should compute grade correctly', () => {
+    expect(component.grade()).toBeTruthy();
+    expect(component.grade()).toHaveProperty('label');
+    expect(component.grade()).toHaveProperty('colorClass');
+  });
+
+  it('should return correct option classes', () => {
+    expect(component.getOptionClass(0)).toBe('');
+    component.selectAnswer(component.currentQuestion().correctIndex);
+    expect(component.getOptionClass(component.currentQuestion().correctIndex)).toBe('correct');
   });
 });

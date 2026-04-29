@@ -1,4 +1,4 @@
-<a class="skip-link" href="#main-content">Skip to main content</a>
+<a class="skip-link" href="#main-content">{{ i18n.t('accessibility.skipToContent') }}</a>
 
 @if (showNavbar()) {
   <app-navbar></app-navbar>
@@ -14,13 +14,14 @@
     role="status"
     aria-live="polite"
     aria-label="Screensaver active"
+    tabindex="0"
     (click)="onUserInteraction()"
     (keydown)="onUserInteraction()">
     <div class="idle-particles" aria-hidden="true"></div>
     <div class="idle-content">
       <div class="idle-icon" aria-hidden="true">🗳️</div>
-      <h2>Your Vote Matters</h2>
-      <p class="idle-hint">Click or press any key to continue</p>
+      <h2>{{ i18n.t('idle.title') }}</h2>
+      <p class="idle-hint">{{ i18n.t('idle.hint') }}</p>
     </div>
   </div>
 }

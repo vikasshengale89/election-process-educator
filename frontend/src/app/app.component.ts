@@ -23,7 +23,7 @@ export class AppComponent implements OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
-  private readonly i18n = inject(I18nService);
+  readonly i18n = inject(I18nService);
   private readonly renderer = inject(Renderer2);
   private readonly document = inject(DOCUMENT);
 

@@ -1,15 +1,16 @@
 export const environment = {
   production: true,
   apiUrl: '/api/v1',
+  googleClientId: '676364789784-9c4li406fnpckhb6189v8gfo2f3u1mak.apps.googleusercontent.com',
   firebase: {
-    apiKey: 'FIREBASE_API_KEY',
-    authDomain: 'election-process-educator.firebaseapp.com',
-    projectId: 'election-process-educator',
-    storageBucket: 'election-process-educator.appspot.com',
-    messagingSenderId: 'FIREBASE_MESSAGING_SENDER_ID',
-    appId: 'FIREBASE_APP_ID',
-    measurementId: 'FIREBASE_MEASUREMENT_ID'
+    apiKey: 'AIzaSyDEMO-key-for-development',
+    authDomain: 'election-process-educator-01.firebaseapp.com',
+    projectId: 'election-process-educator-01',
+    storageBucket: 'election-process-educator-01.appspot.com',
+    messagingSenderId: '168743858833',
+    appId: '1:168743858833:web:demo',
+    measurementId: 'G-DEMO000000'
   },
-  googleAnalyticsId: 'GOOGLE_ANALYTICS_ID',
-  recaptchaSiteKey: 'GOOGLE_RECAPTCHA_SITE_KEY'
+  googleAnalyticsId: 'G-DEMO000000',
+  recaptchaSiteKey: '6LfS39AsAAAAAICyZLynVZ1VM1yaihIP9k8F3YVJ'
 };

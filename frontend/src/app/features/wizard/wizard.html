@@ -1,18 +1,17 @@
 <div class="wizard-page">
   <div class="wizard-header">
-    <h1>📋 Voter Registration Wizard</h1>
-    <p>Answer a few quick questions to get your personalized voting checklist.</p>
+    <h1>📋 {{ i18n.t('wizard.title') }}</h1>
+    <p>{{ i18n.t('wizard.subtitle') }}</p>
   </div>
 
   @if (!isComplete()) {
-    <!-- Progress bar -->
     <div class="glass-panel progress-wrap" role="progressbar"
          [attr.aria-valuenow]="progress()"
          aria-valuemin="0" aria-valuemax="100"
-         [attr.aria-label]="'Step ' + (currentStep() + 1) + ' of ' + totalSteps">
+         [attr.aria-label]="i18n.t('wizard.step') + ' ' + (currentStep() + 1) + ' ' + i18n.t('wizard.of') + ' ' + totalSteps">
       <div class="progress-labels">
-        <span>Step {{ currentStep() + 1 }} of {{ totalSteps }}</span>
-        <span>{{ progress() }}% complete</span>
+        <span>{{ i18n.t('wizard.step') }} {{ currentStep() + 1 }} {{ i18n.t('wizard.of') }} {{ totalSteps }}</span>
+        <span>{{ progress() }}% {{ i18n.t('wizard.complete') }}</span>
       </div>
       <div class="progress-track">
         <div class="progress-fill" [style.width.%]="progress()"></div>
@@ -25,7 +24,6 @@
       </div>
     </div>
 
-    <!-- Question Card -->
     <div class="glass-panel question-card">
       <div class="step-badge">{{ currentStepData().title }}</div>
       <h2>{{ currentStepData().question }}</h2>
@@ -43,33 +41,32 @@
         }
       </div>
       @if (currentStep() > 0) {
-        <button class="btn-back" (click)="goBack()" aria-label="Go back to previous step">
-          ← Back
+        <button class="btn-back" (click)="goBack()" [attr.aria-label]="i18n.t('wizard.back')">
+          ← {{ i18n.t('wizard.back') }}
         </button>
       }
     </div>
   }
 
   @if (isComplete()) {
-    <!-- Results -->
     <div class="glass-panel results-card">
       <div class="results-header">
         <span class="results-icon" aria-hidden="true">🎉</span>
-        <h2>Your Personalized Voting Checklist</h2>
-        <p>You're on your way to the ballot box! Here's what you need to do:</p>
+        <h2>{{ i18n.t('wizard.results') }}</h2>
+        <p>{{ i18n.t('wizard.resultsDesc') }}</p>
       </div>
-      <ul class="checklist" aria-label="Your personalized voting checklist">
+      <ul class="checklist" [attr.aria-label]="i18n.t('wizard.results')">
         @for (item of checklist(); track item) {
           <li class="checklist-item">{{ item }}</li>
         }
       </ul>
       <div class="results-actions">
         <a href="https://vote.gov" target="_blank" rel="noopener noreferrer"
-           class="btn-primary" aria-label="Register to vote at vote.gov (opens in new tab)">
-          Register at vote.gov ↗
+           class="btn-primary" [attr.aria-label]="i18n.t('wizard.register') + ' (opens in new tab)'">
+          {{ i18n.t('wizard.register') }} ↗
         </a>
-        <button class="btn-outline-btn" (click)="restart()" aria-label="Start the wizard over">
-          Start Over
+        <button class="btn-outline-btn" (click)="restart()" [attr.aria-label]="i18n.t('wizard.restart')">
+          {{ i18n.t('wizard.restart') }}
         </button>
       </div>
     </div>

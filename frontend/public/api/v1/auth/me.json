@@ -1,0 +1,3 @@
+{
+  "user": { "id": "static-guest", "name": "Guest User", "isGuest": true }
+}

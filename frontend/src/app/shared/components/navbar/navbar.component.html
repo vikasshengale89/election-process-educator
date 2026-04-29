@@ -20,8 +20,8 @@
     <li><a routerLink="/timeline" routerLinkActive="active" (click)="closeMenu()">📅 {{ i18n.t('nav.timeline') }}</a></li>
     <li><a routerLink="/glossary" routerLinkActive="active" (click)="closeMenu()">📖 {{ i18n.t('nav.glossary') }}</a></li>
     <li><a routerLink="/quiz" routerLinkActive="active" (click)="closeMenu()">🧠 {{ i18n.t('nav.quiz') }}</a></li>
-    <li><a routerLink="/polling" routerLinkActive="active" (click)="closeMenu()">📍 Polling</a></li>
-    <li><a routerLink="/share" routerLinkActive="active" (click)="closeMenu()">📢 Share</a></li>
+    <li><a routerLink="/polling" routerLinkActive="active" (click)="closeMenu()">📍 {{ i18n.t('nav.polling') }}</a></li>
+    <li><a routerLink="/share" routerLinkActive="active" (click)="closeMenu()">📢 {{ i18n.t('nav.share') }}</a></li>
     <li>
       <button class="btn-lang" (click)="switchLanguage()" aria-label="Switch language">
         🌐 {{ i18n.t('lang.switch') }}

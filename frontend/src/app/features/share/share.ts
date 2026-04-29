@@ -15,7 +15,7 @@ export class Share {
   selectedPlatform = signal<string | null>(null);
 
   readonly shareMessage = "I'm ready to vote! 🗳️ I used the Democracy Guide to learn about the election process. Are you registered? Check it out: ";
-  readonly shareUrl = 'https://election-process-educator.web.app';
+  readonly shareUrl = 'https://election-process-educator-01.web.app';
 
   readonly platforms = [
     { id: 'twitter', label: 'X (Twitter)', icon: '𝕏', color: '#000000' },

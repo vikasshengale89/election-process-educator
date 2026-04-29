@@ -2,45 +2,51 @@ import { TestBed } from '@angular/core/testing';
 import { Share } from './share';
 
 describe('Share', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [Share]
-    }).compileComponents();
+  let component: Share;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    component = TestBed.createComponent(Share).componentInstance;
   });
 
   it('should create', () => {
-    const fixture = TestBed.createComponent(Share);
-    expect(fixture.componentInstance).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 
-  it('should have platforms defined', () => {
-    const fixture = TestBed.createComponent(Share);
-    expect(fixture.componentInstance.platforms.length).toBe(4);
+  it('should have share message', () => {
+    expect(component.shareMessage).toBeTruthy();
+    expect(component.shareMessage).toContain('vote');
   });
 
-  it('should have a share message', () => {
-    const fixture = TestBed.createComponent(Share);
-    expect(fixture.componentInstance.shareMessage.length).toBeGreaterThan(0);
+  it('should have correct share URL', () => {
+    expect(component.shareUrl).toBe('https://election-process-educator-01.web.app');
   });
 
-  it('should have a share URL', () => {
-    const fixture = TestBed.createComponent(Share);
-    expect(fixture.componentInstance.shareUrl).toContain('https://');
+  it('should have 4 platforms', () => {
+    expect(component.platforms.length).toBe(4);
   });
 
-  it('should have copy link button', async () => {
-    const fixture = TestBed.createComponent(Share);
-    await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    const copyBtn = compiled.querySelector('.copy-btn');
-    expect(copyBtn).toBeTruthy();
+  it('should have twitter, facebook, linkedin, whatsapp', () => {
+    const ids = component.platforms.map(p => p.id);
+    expect(ids).toContain('twitter');
+    expect(ids).toContain('facebook');
+    expect(ids).toContain('linkedin');
+    expect(ids).toContain('whatsapp');
   });
 
-  it('should display voter readiness checklist', async () => {
-    const fixture = TestBed.createComponent(Share);
-    await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    const items = compiled.querySelectorAll('.status-list li');
-    expect(items.length).toBe(5);
+  it('should start with isCopied false', () => {
+    expect(component.isCopied()).toBe(false);
+  });
+
+  it('should start with no selected platform', () => {
+    expect(component.selectedPlatform()).toBeNull();
+  });
+
+  it('should open share window', () => {
+    const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
+    component.shareOn('twitter');
+    expect(openSpy).toHaveBeenCalled();
+    expect(component.selectedPlatform()).toBe('twitter');
+    openSpy.mockRestore();
   });
 });

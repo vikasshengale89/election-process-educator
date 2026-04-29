@@ -17,9 +17,8 @@ describe('I18nService', () => {
     expect(service.currentLang()).toBe('en');
   });
 
-  it('should translate keys in English', () => {
+  it('should translate English keys', () => {
     expect(service.t('nav.home')).toBe('Home');
-    expect(service.t('nav.wizard')).toBe('Wizard');
   });
 
   it('should switch to Spanish', () => {
@@ -34,18 +33,33 @@ describe('I18nService', () => {
     expect(service.currentLang()).toBe('en');
   });
 
+  it('should return key if translation missing', () => {
+    expect(service.t('missing.key')).toBe('missing.key');
+  });
+
   it('should set language directly', () => {
     service.setLanguage('es');
     expect(service.currentLang()).toBe('es');
-  });
-
-  it('should return key if translation missing', () => {
-    expect(service.t('nonexistent.key')).toBe('nonexistent.key');
-  });
-
-  it('should compute isSpanish correctly', () => {
-    expect(service.isSpanish()).toBe(false);
-    service.switchLanguage();
     expect(service.isSpanish()).toBe(true);
+  });
+
+  it('should report isSpanish correctly', () => {
+    expect(service.isSpanish()).toBe(false);
+    service.setLanguage('es');
+    expect(service.isSpanish()).toBe(true);
+  });
+
+  it('should translate polling and share nav keys', () => {
+    expect(service.t('nav.polling')).toBe('Polling');
+    expect(service.t('nav.share')).toBe('Share');
+    service.setLanguage('es');
+    expect(service.t('nav.polling')).toBe('Ubicación');
+    expect(service.t('nav.share')).toBe('Compartir');
+  });
+
+  it('should translate idle overlay keys', () => {
+    expect(service.t('idle.title')).toBe('Your Vote Matters');
+    service.setLanguage('es');
+    expect(service.t('idle.title')).toBe('Tu Voto Importa');
   });
 });

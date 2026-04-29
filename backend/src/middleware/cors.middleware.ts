@@ -3,8 +3,8 @@ import { envConfig } from '../config/env.config';
 
 const allowedOrigins = [
   envConfig.frontendUrl,
-  'https://election-process-educator.web.app',
-  'https://election-process-educator.firebaseapp.com',
+  'https://election-process-educator-01.web.app',
+  'https://election-process-educator-01.firebaseapp.com',
 ];
 
 export const corsMiddleware = cors({

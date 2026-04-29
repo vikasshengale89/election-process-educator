@@ -17,6 +17,10 @@ describe('NotificationService', () => {
     expect(service.isEnabled()).toBe(false);
   });
 
+  it('should have reminders loaded', () => {
+    expect(service.reminders().length).toBeGreaterThan(0);
+  });
+
   it('should enable notifications', () => {
     service.enableNotifications();
     expect(service.isEnabled()).toBe(true);
@@ -28,7 +32,11 @@ describe('NotificationService', () => {
     expect(service.isEnabled()).toBe(false);
   });
 
-  it('should have reminders loaded', () => {
-    expect(service.reminders().length).toBeGreaterThan(0);
+  it('should have reminders with correct structure', () => {
+    const reminder = service.reminders()[0];
+    expect(reminder).toHaveProperty('id');
+    expect(reminder).toHaveProperty('title');
+    expect(reminder).toHaveProperty('date');
+    expect(reminder).toHaveProperty('type');
   });
 });

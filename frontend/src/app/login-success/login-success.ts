@@ -31,6 +31,7 @@ export class LoginSuccess implements OnInit {
       const sessionId = params['session_id'] as string | undefined;
       if (sessionId) {
         this.authService.setSession(sessionId);
+        this.authService.setCurrentUser({ id: 'oauth', name: 'User', isGuest: false });
         this.router.navigate(['/']);
       } else {
         this.router.navigate(['/login']);

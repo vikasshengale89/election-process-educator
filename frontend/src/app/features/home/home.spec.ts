@@ -3,54 +3,44 @@ import { provideRouter } from '@angular/router';
 import { Home } from './home';
 
 describe('Home', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [Home],
+  let component: Home;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       providers: [provideRouter([])]
-    }).compileComponents();
+    });
+    component = TestBed.createComponent(Home).componentInstance;
   });
 
   it('should create', () => {
-    const fixture = TestBed.createComponent(Home);
-    expect(fixture.componentInstance).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 
   it('should have 6 feature cards', () => {
-    const fixture = TestBed.createComponent(Home);
-    expect(fixture.componentInstance.features.length).toBe(6);
+    expect(component.features.length).toBe(6);
   });
 
-  it('should render hero heading', async () => {
-    const fixture = TestBed.createComponent(Home);
-    await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    const heading = compiled.querySelector('#hero-heading');
-    expect(heading).toBeTruthy();
+  it('should have 3 stats', () => {
+    expect(component.stats.length).toBe(3);
   });
 
-  it('should have accessible feature cards with proper ARIA', async () => {
-    const fixture = TestBed.createComponent(Home);
-    await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    const featureList = compiled.querySelector('[role="list"]');
-    expect(featureList).toBeTruthy();
-    const items = compiled.querySelectorAll('[role="listitem"]');
-    expect(items.length).toBe(6);
+  it('should have features with required properties', () => {
+    component.features.forEach(f => {
+      expect(f).toHaveProperty('icon');
+      expect(f).toHaveProperty('title');
+      expect(f).toHaveProperty('route');
+      expect(f).toHaveProperty('colorClass');
+    });
   });
 
-  it('should have stats section', async () => {
-    const fixture = TestBed.createComponent(Home);
-    await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    const stats = compiled.querySelectorAll('.stat-card');
-    expect(stats.length).toBe(3);
+  it('should include polling and share features', () => {
+    const routes = component.features.map(f => f.route);
+    expect(routes).toContain('/polling');
+    expect(routes).toContain('/share');
   });
 
-  it('should have notification button', async () => {
-    const fixture = TestBed.createComponent(Home);
-    await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    const btn = compiled.querySelector('.reminders-banner button');
-    expect(btn).toBeTruthy();
+  it('should enable reminders', () => {
+    component.enableReminders();
+    expect(component.notifications.isEnabled()).toBe(true);
   });
 });

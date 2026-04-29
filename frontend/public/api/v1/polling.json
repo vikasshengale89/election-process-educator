@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "data": {
+    "locations": [
+      { "name": "Community Center - Precinct 42", "address": "123 Democracy Lane, Springfield, IL 62701", "hours": "6:00 AM - 7:00 PM", "distance": "0.8 miles", "accessibility": ["Wheelchair accessible", "Curbside voting available", "ASL interpreter on request"] },
+      { "name": "Lincoln Elementary School - Gym", "address": "456 Liberty Ave, Springfield, IL 62702", "hours": "6:00 AM - 7:00 PM", "distance": "1.2 miles", "accessibility": ["Wheelchair accessible", "Parking available"] },
+      { "name": "First Baptist Church - Fellowship Hall", "address": "789 Freedom Blvd, Springfield, IL 62703", "hours": "6:00 AM - 8:00 PM", "distance": "2.1 miles", "accessibility": ["Wheelchair accessible", "Audio assistance available"] }
+    ],
+    "idRequirements": {
+      "state": "General",
+      "documents": [
+        "Valid state-issued photo ID (Driver's License or State ID)",
+        "US Passport or Passport Card",
+        "Military ID",
+        "Utility bill, bank statement, or government document showing name and address (within 30 days)"
+      ]
+    },
+    "state": "General",
+    "zip": "00000"
+  }
+}
