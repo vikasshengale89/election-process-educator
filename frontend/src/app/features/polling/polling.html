@@ -1,0 +1,90 @@
+<div class="polling-page">
+  <div class="page-header">
+    <h1>📍 {{ i18n.t('polling.title') }}</h1>
+    <p>{{ i18n.t('polling.subtitle') }}</p>
+  </div>
+
+  <!-- Search Section -->
+  <div class="glass-panel search-section">
+    <label for="address-input" class="sr-only">{{ i18n.t('polling.placeholder') }}</label>
+    <div class="search-row">
+      <input
+        id="address-input"
+        type="text"
+        class="search-input"
+        [placeholder]="i18n.t('polling.placeholder')"
+        [value]="searchAddress()"
+        (input)="searchAddress.set($any($event.target).value)"
+        (keydown.enter)="search()"
+        aria-label="Enter your address to find polling locations" />
+      <button
+        class="btn-primary"
+        (click)="search()"
+        [disabled]="isSearching() || !searchAddress().trim()"
+        aria-label="Search for polling locations">
+        {{ isSearching() ? '...' : i18n.t('polling.search') }}
+      </button>
+    </div>
+  </div>
+
+  @if (hasSearched()) {
+    <!-- Results -->
+    <section aria-label="Polling locations found">
+      <h2 class="section-title">Nearby Polling Locations</h2>
+      <div class="locations-grid" role="list">
+        @for (loc of results(); track loc.name) {
+          <article class="location-card glass-panel" role="listitem">
+            <div class="location-header">
+              <h3>{{ loc.name }}</h3>
+              <span class="distance-badge">{{ loc.distance }}</span>
+            </div>
+            <div class="location-detail">
+              <span class="detail-icon" aria-hidden="true">📍</span>
+              <span>{{ loc.address }}</span>
+            </div>
+            <div class="location-detail">
+              <span class="detail-icon" aria-hidden="true">🕐</span>
+              <span>{{ loc.hours }}</span>
+            </div>
+            <div class="accessibility-tags" aria-label="Accessibility features">
+              @for (tag of loc.accessibility; track tag) {
+                <span class="a11y-tag">♿ {{ tag }}</span>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    </section>
+
+    <!-- ID Requirements -->
+    <section class="glass-panel id-section" aria-labelledby="id-heading">
+      <h2 id="id-heading">🪪 Required Identification Documents</h2>
+      <p>Based on your location, you will need one of the following:</p>
+      <ul class="id-list" role="list">
+        @for (doc of idDocuments(); track doc) {
+          <li role="listitem">{{ doc }}</li>
+        }
+      </ul>
+    </section>
+  }
+
+  @if (!hasSearched() && !isSearching()) {
+    <div class="glass-panel info-section">
+      <h2>How It Works</h2>
+      <div class="steps-row">
+        <div class="info-step">
+          <span class="step-num" aria-hidden="true">1</span>
+          <p>Enter your registered address above</p>
+        </div>
+        <div class="info-step">
+          <span class="step-num" aria-hidden="true">2</span>
+          <p>We find your nearest polling locations</p>
+        </div>
+        <div class="info-step">
+          <span class="step-num" aria-hidden="true">3</span>
+          <p>View hours, accessibility info, and ID requirements</p>
+        </div>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,159 @@
+import { Injectable, signal, computed } from '@angular/core';
+
+export type SupportedLang = 'en' | 'es';
+
+interface TranslationMap {
+  [key: string]: string;
+}
+
+const TRANSLATIONS: Record<SupportedLang, TranslationMap> = {
+  en: {
+    'nav.home': 'Home',
+    'nav.wizard': 'Wizard',
+    'nav.timeline': 'Timeline',
+    'nav.glossary': 'Glossary',
+    'nav.quiz': 'Quiz',
+    'nav.logout': 'Logout',
+    'nav.brand': 'Democracy Guide',
+    'home.badge': 'Your Democracy Companion',
+    'home.title': 'Demystifying',
+    'home.titleHighlight': 'Democracy',
+    'home.subtitle': 'Clear, step-by-step guidance through voter registration, election timelines, and polling procedures. Every citizen deserves to vote with confidence.',
+    'home.cta': 'Get Started',
+    'home.viewTimeline': 'View Timeline',
+    'home.features': 'Everything You Need',
+    'home.stat1': 'Election Terms Explained',
+    'home.stat2': 'Registration Wizard',
+    'home.stat3': 'Free & Accessible',
+    'wizard.title': 'Voter Registration Wizard',
+    'wizard.subtitle': 'Answer a few quick questions to get your personalized voting checklist.',
+    'wizard.step': 'Step',
+    'wizard.of': 'of',
+    'wizard.complete': 'complete',
+    'wizard.back': 'Back',
+    'wizard.results': 'Your Personalized Voting Checklist',
+    'wizard.resultsDesc': "You're on your way to the ballot box! Here's what you need to do:",
+    'wizard.register': 'Register at vote.gov',
+    'wizard.restart': 'Start Over',
+    'timeline.title': 'Election Timeline',
+    'timeline.subtitle': 'Key dates and deadlines for the 2025–2026 election cycle.',
+    'timeline.disclaimer': 'Dates shown are illustrative examples. Always verify exact deadlines with your local or state election office.',
+    'glossary.title': 'Election Glossary',
+    'glossary.subtitle': 'Plain-language explanations of every election term you will ever encounter.',
+    'glossary.search': 'Search terms...',
+    'quiz.title': 'Election Knowledge Quiz',
+    'quiz.subtitle': 'Test how ready you are for the ballot box.',
+    'quiz.question': 'Question',
+    'quiz.score': 'Score',
+    'quiz.next': 'Next Question',
+    'quiz.results': 'See Results',
+    'quiz.retake': 'Retake Quiz',
+    'quiz.correct': 'Correct!',
+    'quiz.incorrect': 'Not quite.',
+    'login.title': 'Democracy Guide',
+    'login.subtitle': 'Your interactive guide to understanding elections, voter registration, and the path to the ballot box.',
+    'login.google': 'Continue with Google',
+    'login.guest': 'Continue as Guest',
+    'login.or': 'or',
+    'polling.title': 'Find Your Polling Location',
+    'polling.subtitle': 'Enter your address to find your nearest polling location and operating hours.',
+    'polling.placeholder': 'Enter your address (e.g., 123 Main St, City, State)',
+    'polling.search': 'Find Location',
+    'polling.hours': 'Hours',
+    'polling.address': 'Address',
+    'notifications.title': 'Election Reminders',
+    'notifications.subtitle': 'Never miss an important election deadline.',
+    'notifications.enable': 'Enable Notifications',
+    'notifications.enabled': 'Notifications Enabled',
+    'share.title': 'Share Your Readiness',
+    'share.subtitle': 'Let your friends know you are ready to vote!',
+    'share.button': 'Share on Social Media',
+    'share.copied': 'Link copied to clipboard!',
+    'lang.switch': 'Español',
+    'accessibility.skipToContent': 'Skip to main content',
+  },
+  es: {
+    'nav.home': 'Inicio',
+    'nav.wizard': 'Asistente',
+    'nav.timeline': 'Cronología',
+    'nav.glossary': 'Glosario',
+    'nav.quiz': 'Cuestionario',
+    'nav.logout': 'Salir',
+    'nav.brand': 'Guía Democrática',
+    'home.badge': 'Tu Compañero Democrático',
+    'home.title': 'Desmitificando la',
+    'home.titleHighlight': 'Democracia',
+    'home.subtitle': 'Orientación clara y paso a paso sobre el registro de votantes, los plazos electorales y los procedimientos de votación. Cada ciudadano merece votar con confianza.',
+    'home.cta': 'Comenzar',
+    'home.viewTimeline': 'Ver Cronología',
+    'home.features': 'Todo Lo Que Necesitas',
+    'home.stat1': 'Términos Electorales Explicados',
+    'home.stat2': 'Asistente de Registro',
+    'home.stat3': 'Gratis y Accesible',
+    'wizard.title': 'Asistente de Registro de Votante',
+    'wizard.subtitle': 'Responde algunas preguntas rápidas para obtener tu lista personalizada de votación.',
+    'wizard.step': 'Paso',
+    'wizard.of': 'de',
+    'wizard.complete': 'completado',
+    'wizard.back': 'Atrás',
+    'wizard.results': 'Tu Lista Personalizada de Votación',
+    'wizard.resultsDesc': '¡Estás en camino a las urnas! Esto es lo que necesitas hacer:',
+    'wizard.register': 'Regístrate en vote.gov',
+    'wizard.restart': 'Empezar de Nuevo',
+    'timeline.title': 'Cronología Electoral',
+    'timeline.subtitle': 'Fechas clave y plazos para el ciclo electoral 2025–2026.',
+    'timeline.disclaimer': 'Las fechas mostradas son ejemplos ilustrativos. Siempre verifique los plazos exactos con su oficina electoral local o estatal.',
+    'glossary.title': 'Glosario Electoral',
+    'glossary.subtitle': 'Explicaciones en lenguaje sencillo de cada término electoral.',
+    'glossary.search': 'Buscar términos...',
+    'quiz.title': 'Cuestionario de Conocimiento Electoral',
+    'quiz.subtitle': 'Prueba qué tan preparado estás para las urnas.',
+    'quiz.question': 'Pregunta',
+    'quiz.score': 'Puntuación',
+    'quiz.next': 'Siguiente Pregunta',
+    'quiz.results': 'Ver Resultados',
+    'quiz.retake': 'Repetir Cuestionario',
+    'quiz.correct': '¡Correcto!',
+    'quiz.incorrect': 'No exactamente.',
+    'login.title': 'Guía Democrática',
+    'login.subtitle': 'Tu guía interactiva para entender las elecciones, el registro de votantes y el camino a las urnas.',
+    'login.google': 'Continuar con Google',
+    'login.guest': 'Continuar como Invitado',
+    'login.or': 'o',
+    'polling.title': 'Encuentra Tu Centro de Votación',
+    'polling.subtitle': 'Ingresa tu dirección para encontrar tu centro de votación más cercano.',
+    'polling.placeholder': 'Ingresa tu dirección (ej: 123 Calle Principal, Ciudad, Estado)',
+    'polling.search': 'Buscar Ubicación',
+    'polling.hours': 'Horario',
+    'polling.address': 'Dirección',
+    'notifications.title': 'Recordatorios Electorales',
+    'notifications.subtitle': 'Nunca pierdas un plazo electoral importante.',
+    'notifications.enable': 'Activar Notificaciones',
+    'notifications.enabled': 'Notificaciones Activadas',
+    'share.title': 'Comparte Tu Preparación',
+    'share.subtitle': '¡Haz saber a tus amigos que estás listo para votar!',
+    'share.button': 'Compartir en Redes Sociales',
+    'share.copied': '¡Enlace copiado al portapapeles!',
+    'lang.switch': 'English',
+    'accessibility.skipToContent': 'Saltar al contenido principal',
+  }
+};
+
+@Injectable({ providedIn: 'root' })
+export class I18nService {
+  private readonly _currentLang = signal<SupportedLang>('en');
+  readonly currentLang = this._currentLang.asReadonly();
+  readonly isSpanish = computed(() => this._currentLang() === 'es');
+
+  t(key: string): string {
+    return TRANSLATIONS[this._currentLang()][key] ?? key;
+  }
+
+  switchLanguage(): void {
+    this._currentLang.update(lang => lang === 'en' ? 'es' : 'en');
+  }
+
+  setLanguage(lang: SupportedLang): void {
+    this._currentLang.set(lang);
+  }
+}

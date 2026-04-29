@@ -1,6 +1,6 @@
 <nav class="navbar glass-panel" role="navigation" aria-label="Main navigation">
-  <a class="navbar-brand" routerLink="/" aria-label="Election Process Educator Home">
-    <span aria-hidden="true">🗳️</span> Democracy Guide
+  <a class="navbar-brand" routerLink="/" aria-label="Election Process Educator Home" (click)="closeMenu()">
+    <span aria-hidden="true">🗳️</span> {{ i18n.t('nav.brand') }}
   </a>
 
   <button
@@ -9,18 +9,27 @@
     [attr.aria-expanded]="isMenuOpen()"
     aria-controls="nav-links"
     aria-label="Toggle navigation menu">
-    <span></span><span></span><span></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
   </button>
 
   <ul id="nav-links" class="nav-links" [class.open]="isMenuOpen()" role="list">
-    <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="isMenuOpen.set(false)">Home</a></li>
-    <li><a routerLink="/wizard" routerLinkActive="active" (click)="isMenuOpen.set(false)">📋 Wizard</a></li>
-    <li><a routerLink="/timeline" routerLinkActive="active" (click)="isMenuOpen.set(false)">📅 Timeline</a></li>
-    <li><a routerLink="/glossary" routerLinkActive="active" (click)="isMenuOpen.set(false)">📖 Glossary</a></li>
-    <li><a routerLink="/quiz" routerLinkActive="active" (click)="isMenuOpen.set(false)">🧠 Quiz</a></li>
+    <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="closeMenu()">{{ i18n.t('nav.home') }}</a></li>
+    <li><a routerLink="/wizard" routerLinkActive="active" (click)="closeMenu()">📋 {{ i18n.t('nav.wizard') }}</a></li>
+    <li><a routerLink="/timeline" routerLinkActive="active" (click)="closeMenu()">📅 {{ i18n.t('nav.timeline') }}</a></li>
+    <li><a routerLink="/glossary" routerLinkActive="active" (click)="closeMenu()">📖 {{ i18n.t('nav.glossary') }}</a></li>
+    <li><a routerLink="/quiz" routerLinkActive="active" (click)="closeMenu()">🧠 {{ i18n.t('nav.quiz') }}</a></li>
+    <li><a routerLink="/polling" routerLinkActive="active" (click)="closeMenu()">📍 Polling</a></li>
+    <li><a routerLink="/share" routerLinkActive="active" (click)="closeMenu()">📢 Share</a></li>
+    <li>
+      <button class="btn-lang" (click)="switchLanguage()" aria-label="Switch language">
+        🌐 {{ i18n.t('lang.switch') }}
+      </button>
+    </li>
     <li>
       <button class="btn-logout" (click)="logout()" aria-label="Log out">
-        {{ currentUser ? currentUser.name.split(' ')[0] : 'Guest' }} · Logout
+        {{ currentUser ? currentUser.name.split(' ')[0] : 'Guest' }} · {{ i18n.t('nav.logout') }}
       </button>
     </li>
   </ul>

@@ -13,27 +13,28 @@ import { quizRoutes } from './routes/quiz.routes';
 
 const app = express();
 
-// Middleware
 app.use(helmet());
 app.use(corsMiddleware);
 app.use(express.json());
 
-// Routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/timeline', timelineRoutes);
 app.use('/api/v1/glossary', glossaryRoutes);
 app.use('/api/v1/polling', pollingRoutes);
 app.use('/api/v1/quiz', quizRoutes);
 
-app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to the Election Process Educator API' });
+app.get('/health', (_req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Use error handler
+app.get('/', (_req, res) => {
+  res.json({ message: 'Election Process Educator API', version: '1.0.0' });
+});
+
 app.use(errorHandler);
 
 const PORT = envConfig.port;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  logger.info(`Server started on port ${PORT}`);
 });

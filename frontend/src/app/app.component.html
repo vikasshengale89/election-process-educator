@@ -1,18 +1,20 @@
-<app-navbar></app-navbar>
+@if (showNavbar()) {
+  <app-navbar></app-navbar>
+}
 
-<main class="container">
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<main id="main-content" class="container" role="main">
   <router-outlet></router-outlet>
 </main>
 
 @if (isIdle()) {
-  <div class="idle-overlay" aria-hidden="true">
-    <div id="particles-js"></div>
+  <div class="idle-overlay" role="status" aria-live="polite" aria-label="Screensaver mode active. Move mouse or press any key to continue.">
+    <div class="idle-particles" aria-hidden="true"></div>
     <div class="idle-content">
-      <h2>Next Major Election Event</h2>
-      <div class="countdown">
-        <span>14</span> days <span>08</span> hours <span>45</span> minutes
-      </div>
-      <p>Move mouse or press any key to continue</p>
+      <div class="idle-icon" aria-hidden="true">🗳️</div>
+      <h2>Your Vote Matters</h2>
+      <p class="idle-hint">Move mouse or press any key to continue</p>
     </div>
   </div>
 }

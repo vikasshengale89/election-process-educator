@@ -19,6 +19,8 @@ export const routes: Routes = [
       { path: 'timeline', loadComponent: () => import('./features/timeline/timeline').then(m => m.Timeline) },
       { path: 'glossary', loadComponent: () => import('./features/glossary/glossary').then(m => m.Glossary) },
       { path: 'quiz', loadComponent: () => import('./features/quiz/quiz').then(m => m.Quiz) },
+      { path: 'polling', loadComponent: () => import('./features/polling/polling').then(m => m.Polling) },
+      { path: 'share', loadComponent: () => import('./features/share/share').then(m => m.Share) },
     ]
   },
   { path: '**', redirectTo: '' }

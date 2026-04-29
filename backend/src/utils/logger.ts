@@ -1,13 +1,43 @@
-export const logger = {
-  info: (message: string, ...meta: unknown[]) => {
-    // In a real application, this would send logs to a central service
-    process.stdout.write(`[INFO] ${message} ${meta.length ? JSON.stringify(meta) : ''}\n`);
-  },
-  error: (message: string, ...meta: unknown[]) => {
-    // In a real application, this would send logs to a central service
-    process.stderr.write(`[ERROR] ${message} ${meta.length ? JSON.stringify(meta) : ''}\n`);
-  },
-  warn: (message: string, ...meta: unknown[]) => {
-    process.stdout.write(`[WARN] ${message} ${meta.length ? JSON.stringify(meta) : ''}\n`);
+type LogLevel = 'info' | 'warn' | 'error' | 'debug';
+
+interface LogEntry {
+  level: LogLevel;
+  message: string;
+  timestamp: string;
+  data?: unknown;
+}
+
+class Logger {
+  private formatEntry(level: LogLevel, message: string, data?: unknown): LogEntry {
+    return {
+      level,
+      message,
+      timestamp: new Date().toISOString(),
+      data
+    };
   }
-};
+
+  info(message: string, data?: unknown): void {
+    const entry = this.formatEntry('info', message, data);
+    process.stdout.write(JSON.stringify(entry) + '\n');
+  }
+
+  warn(message: string, data?: unknown): void {
+    const entry = this.formatEntry('warn', message, data);
+    process.stdout.write(JSON.stringify(entry) + '\n');
+  }
+
+  error(message: string, data?: unknown): void {
+    const entry = this.formatEntry('error', message, data);
+    process.stderr.write(JSON.stringify(entry) + '\n');
+  }
+
+  debug(message: string, data?: unknown): void {
+    if (process.env['NODE_ENV'] !== 'production') {
+      const entry = this.formatEntry('debug', message, data);
+      process.stdout.write(JSON.stringify(entry) + '\n');
+    }
+  }
+}
+
+export const logger = new Logger();

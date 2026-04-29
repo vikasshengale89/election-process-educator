@@ -1,7 +1,8 @@
-import { Component, ChangeDetectionStrategy, HostListener, signal, inject, PLATFORM_ID, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, HostListener, signal, inject, PLATFORM_ID, OnDestroy, OnInit } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
+import { AuthService } from './auth';
 
 @Component({
   selector: 'app-root',
@@ -11,14 +12,17 @@ import { NavbarComponent } from './shared/components/navbar/navbar.component';
   styleUrl: './app.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnDestroy {
+export class AppComponent implements OnInit, OnDestroy {
   isIdle = signal(false);
+  showNavbar = signal(false);
 
   private idleTimeout: ReturnType<typeof setTimeout> | null = null;
   private readonly IDLE_TIME_MS = 30_000;
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly authService = inject(AuthService);
 
-  constructor() {
+  ngOnInit(): void {
+    this.showNavbar.set(this.authService.isLoggedIn());
     if (isPlatformBrowser(this.platformId)) {
       this.resetIdleTimer();
     }
@@ -33,6 +37,7 @@ export class AppComponent implements OnDestroy {
       this.isIdle.set(false);
     }
     this.resetIdleTimer();
+    this.showNavbar.set(this.authService.isLoggedIn());
   }
 
   private resetIdleTimer(): void {
