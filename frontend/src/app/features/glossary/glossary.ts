@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, signal, computed, inject } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 import { I18nService } from '../../core/services/i18n.service';
+import { AnalyticsService } from '../../core/services/analytics.service';
 
 interface GlossaryTerm {
   readonly term: string;
@@ -19,6 +20,10 @@ interface GlossaryTerm {
 })
 export class Glossary {
   readonly i18n = inject(I18nService);
+  private readonly analytics = inject(AnalyticsService);
+  /** Dedupes analytics so each distinct trimmed query fires at most one glossary_search. */
+  private lastTrackedGlossaryQuery = '';
+
   searchQuery = signal('');
   activeCategory = signal('all');
 
@@ -60,6 +65,16 @@ export class Glossary {
 
   onSearchInput(event: Event): void {
     const target = event.target as HTMLInputElement;
-    this.searchQuery.set(target.value);
+    const raw = target.value;
+    this.searchQuery.set(raw);
+    const q = raw.trim();
+    if (q.length === 0) {
+      this.lastTrackedGlossaryQuery = '';
+      return;
+    }
+    if (q !== this.lastTrackedGlossaryQuery) {
+      this.lastTrackedGlossaryQuery = q;
+      this.analytics.trackGlossarySearch(q.length);
+    }
   }
 }

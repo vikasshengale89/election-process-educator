@@ -44,4 +44,21 @@ describe('Quiz Controller', () => {
       expect(q.correctIndex).toBeLessThan(4);
     }
   });
+
+  it('should include explanation for every question', () => {
+    const req = {} as Request;
+    const res = { json: vi.fn() } as unknown as Response;
+    const next = vi.fn() as NextFunction;
+
+    getQuiz(req, res, next);
+
+    const response = (res.json as ReturnType<typeof vi.fn>).mock.calls[0][0];
+    expect(response.data.length).toBe(7);
+
+    const explanations = response.data.map((q: { explanation: unknown }) => q.explanation);
+    for (const ex of explanations) {
+      expect(typeof ex).toBe('string');
+      expect((ex as string).trim().length).toBeGreaterThan(0);
+    }
+  });
 });

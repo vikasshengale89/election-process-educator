@@ -1,10 +1,11 @@
-<div class="share-page">
-  <div class="page-header">
-    <h1>📢 {{ i18n.t('share.title') }}</h1>
+<section class="share-page" aria-labelledby="share-page-heading">
+  <header class="page-header">
+    <h1 id="share-page-heading"><span aria-hidden="true">📢 </span>{{ i18n.t('share.title') }}</h1>
     <p>{{ i18n.t('share.subtitle') }}</p>
-  </div>
+  </header>
 
-  <div class="glass-panel share-card">
+  <section class="glass-panel share-card" aria-labelledby="share-card-heading">
+    <h2 id="share-card-heading" class="sr-only">{{ i18n.t('share.title') }}</h2>
     <div class="readiness-badge">
       <span class="badge-icon" aria-hidden="true">✅</span>
       <span class="badge-text">{{ i18n.t('share.readyBadge') }}</span>
@@ -12,9 +13,10 @@
 
     <p class="share-preview">{{ shareMessage }}</p>
 
-    <div class="platforms-grid" role="group" aria-label="Share on social media platforms">
+    <div class="platforms-grid" role="group" [attr.aria-label]="i18n.t('share.platformGroupAria')">
       @for (platform of platforms; track platform.id) {
         <button
+          type="button"
           class="platform-btn"
           [style.--platform-color]="platform.color"
           (click)="shareOn(platform.id)"
@@ -27,16 +29,17 @@
 
     <div class="copy-section">
       <button
+        type="button"
         class="btn-primary copy-btn"
         (click)="copyLink()"
         [attr.aria-label]="isCopied() ? i18n.t('share.copied') : i18n.t('share.copyLink')">
         {{ isCopied() ? '✅ ' + i18n.t('share.copied') : '🔗 ' + i18n.t('share.copyLink') }}
       </button>
     </div>
-  </div>
+  </section>
 
-  <div class="glass-panel checklist-share">
-    <h2>{{ i18n.t('share.readinessTitle') }}</h2>
+  <section class="glass-panel checklist-share" aria-labelledby="share-readiness-heading">
+    <h2 id="share-readiness-heading">{{ i18n.t('share.readinessTitle') }}</h2>
     <ul class="status-list" role="list">
       <li role="listitem"><span class="check" aria-hidden="true">✅</span> {{ i18n.t('share.registered') }}</li>
       <li role="listitem"><span class="check" aria-hidden="true">✅</span> {{ i18n.t('share.knowLocation') }}</li>
@@ -44,5 +47,5 @@
       <li role="listitem"><span class="check" aria-hidden="true">✅</span> {{ i18n.t('share.reviewedTimeline') }}</li>
       <li role="listitem"><span class="check" aria-hidden="true">✅</span> {{ i18n.t('share.understandTerms') }}</li>
     </ul>
-  </div>
-</div>
+  </section>
+</section>

@@ -21,6 +21,11 @@ describe('NotificationService', () => {
     expect(service.reminders().length).toBeGreaterThan(0);
   });
 
+  it('should expose upcoming reminder count', () => {
+    expect(service.upcomingReminderCount()).toBeGreaterThanOrEqual(0);
+    expect(service.upcomingReminderCount()).toBeLessThanOrEqual(service.reminders().length);
+  });
+
   it('should enable notifications', () => {
     service.enableNotifications();
     expect(service.isEnabled()).toBe(true);

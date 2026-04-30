@@ -45,10 +45,13 @@
     <p>{{ i18n.t('notifications.subtitle') }}</p>
   </div>
   <button
+    type="button"
     class="btn-primary"
     (click)="enableReminders()"
     [disabled]="notifications.isEnabled()"
-    [attr.aria-label]="notifications.isEnabled() ? 'Notifications already enabled' : 'Enable election deadline notifications'">
+    [attr.aria-label]="
+      notifications.isEnabled() ? i18n.t('home.notificationButtonEnabled') : i18n.t('home.notificationButtonEnable')
+    ">
     {{ notifications.isEnabled() ? '✅ ' + i18n.t('notifications.enabled') : i18n.t('notifications.enable') }}
   </button>
 </section>

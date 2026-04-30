@@ -1,12 +1,16 @@
-<div class="timeline-page">
-  <div class="page-header">
-    <h1>📅 {{ i18n.t('timeline.title') }}</h1>
+<section class="timeline-page" aria-labelledby="timeline-page-heading">
+  <header class="page-header">
+    <h1 id="timeline-page-heading"><span aria-hidden="true">📅 </span>{{ i18n.t('timeline.title') }}</h1>
     <p>{{ i18n.t('timeline.subtitle') }}</p>
-  </div>
+  </header>
 
-  <div class="filter-bar glass-panel" role="group" aria-label="Filter timeline events by type">
+  <div
+    class="filter-bar glass-panel"
+    role="group"
+    [attr.aria-label]="i18n.t('timeline.filterGroupAria')">
     @for (filter of filters; track filter) {
       <button
+        type="button"
         class="filter-btn"
         [class.active]="activeFilter() === filter"
         (click)="setFilter(filter)"
@@ -17,13 +21,15 @@
     }
   </div>
 
-  <div class="timeline" role="list" aria-label="Election timeline events">
+  <p id="timeline-filter-announcement" class="sr-only" aria-live="polite" aria-atomic="true">{{ filterLiveMessage() }}</p>
+
+  <div class="timeline" role="list" [attr.aria-label]="i18n.t('timeline.listAria')">
     @for (event of filteredEvents(); track event.date) {
       <div class="timeline-item glass-panel" role="listitem">
         <div class="timeline-dot" [class]="getTypeClass(event.type)" aria-hidden="true"></div>
         <div class="timeline-content">
           <div class="event-meta">
-            <span class="event-date">📆 {{ event.date }}</span>
+            <span class="event-date"><span aria-hidden="true">📆 </span>{{ event.date }}</span>
             <span class="event-tag" [class]="getTypeClass(event.type)">
               {{ getTypeLabel(event.type) }}
             </span>
@@ -35,13 +41,13 @@
     }
 
     @if (filteredEvents().length === 0) {
-      <div class="glass-panel empty-state" role="status">
+      <div class="glass-panel empty-state" role="status" aria-live="polite">
         <p>{{ i18n.t('timeline.noEvents') }}</p>
       </div>
     }
   </div>
 
-  <div class="disclaimer glass-panel">
-    <p>⚠️ <strong>{{ i18n.t('timeline.disclaimer') }}</strong> <a href="https://vote.gov" target="_blank" rel="noopener noreferrer">vote.gov</a></p>
-  </div>
-</div>
+  <aside class="disclaimer glass-panel" [attr.aria-label]="i18n.t('timeline.disclaimerAside')">
+    <p><span aria-hidden="true">⚠️ </span><strong>{{ i18n.t('timeline.disclaimer') }}</strong> <a href="https://vote.gov" target="_blank" rel="noopener noreferrer">{{ i18n.t('timeline.voteGovLink') }}</a></p>
+  </aside>
+</section>

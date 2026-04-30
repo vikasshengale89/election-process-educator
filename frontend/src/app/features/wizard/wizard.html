@@ -1,35 +1,53 @@
-<div class="wizard-page">
-  <div class="wizard-header">
-    <h1>📋 {{ i18n.t('wizard.title') }}</h1>
+<section class="wizard-page" aria-labelledby="wizard-page-heading">
+  <header class="wizard-header">
+    <h1 id="wizard-page-heading"><span aria-hidden="true">📋 </span>{{ i18n.t('wizard.title') }}</h1>
     <p>{{ i18n.t('wizard.subtitle') }}</p>
-  </div>
+  </header>
 
   @if (!isComplete()) {
-    <div class="glass-panel progress-wrap" role="progressbar"
-         [attr.aria-valuenow]="progress()"
-         aria-valuemin="0" aria-valuemax="100"
-         [attr.aria-label]="i18n.t('wizard.step') + ' ' + (currentStep() + 1) + ' ' + i18n.t('wizard.of') + ' ' + totalSteps">
-      <div class="progress-labels">
-        <span>{{ i18n.t('wizard.step') }} {{ currentStep() + 1 }} {{ i18n.t('wizard.of') }} {{ totalSteps }}</span>
-        <span>{{ progress() }}% {{ i18n.t('wizard.complete') }}</span>
+    <section class="glass-panel progress-wrap">
+      <div
+        role="progressbar"
+        [attr.aria-valuenow]="progress()"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        [attr.aria-label]="
+          i18n.t('wizard.step') +
+          ' ' +
+          (currentStep() + 1) +
+          ' ' +
+          i18n.t('wizard.of') +
+          ' ' +
+          totalSteps +
+          '; ' +
+          progress() +
+          '% ' +
+          i18n.t('wizard.complete')">
+        <div class="progress-labels">
+          <span>{{ i18n.t('wizard.step') }} {{ currentStep() + 1 }} {{ i18n.t('wizard.of') }} {{ totalSteps }}</span>
+          <span>{{ progress() }}% {{ i18n.t('wizard.complete') }}</span>
+        </div>
+        <div class="progress-track" aria-hidden="true">
+          <div class="progress-fill" [style.width.%]="progress()"></div>
+        </div>
+        <div class="step-dots" aria-hidden="true">
+          @for (step of steps; track step.id) {
+            <div
+              class="step-dot"
+              [class.active]="step.id <= currentStep()"
+              [class.current]="step.id === currentStep()"></div>
+          }
+        </div>
       </div>
-      <div class="progress-track">
-        <div class="progress-fill" [style.width.%]="progress()"></div>
-      </div>
-      <div class="step-dots" aria-hidden="true">
-        @for (step of steps; track step.id) {
-          <div class="step-dot" [class.active]="step.id <= currentStep()"
-               [class.current]="step.id === currentStep()"></div>
-        }
-      </div>
-    </div>
+    </section>
 
-    <div class="glass-panel question-card">
+    <section class="glass-panel question-card" [attr.aria-labelledby]="'wizard-q-' + currentStep()">
       <div class="step-badge">{{ currentStepData().title }}</div>
-      <h2>{{ currentStepData().question }}</h2>
-      <div class="options-grid" role="radiogroup" [attr.aria-label]="currentStepData().question">
+      <h2 [id]="'wizard-q-' + currentStep()">{{ currentStepData().question }}</h2>
+      <div class="options-grid" role="radiogroup" [attr.aria-labelledby]="'wizard-q-' + currentStep()">
         @for (option of currentStepData().options; track option.value) {
           <button
+            type="button"
             class="option-btn"
             (click)="selectOption(getAnswerKey(currentStep()), option.value)"
             [attr.aria-label]="option.label"
@@ -41,34 +59,43 @@
         }
       </div>
       @if (currentStep() > 0) {
-        <button class="btn-back" (click)="goBack()" [attr.aria-label]="i18n.t('wizard.back')">
-          ← {{ i18n.t('wizard.back') }}
+        <button type="button" class="btn-back" (click)="goBack()" [attr.aria-label]="i18n.t('wizard.back')">
+          <span aria-hidden="true">← </span>{{ i18n.t('wizard.back') }}
         </button>
       }
-    </div>
+    </section>
   }
 
   @if (isComplete()) {
-    <div class="glass-panel results-card">
-      <div class="results-header">
+    <section
+      class="glass-panel results-card"
+      role="region"
+      aria-labelledby="wizard-checklist-heading"
+      aria-describedby="wizard-checklist-desc">
+      <header class="results-header">
         <span class="results-icon" aria-hidden="true">🎉</span>
-        <h2>{{ i18n.t('wizard.results') }}</h2>
-        <p>{{ i18n.t('wizard.resultsDesc') }}</p>
-      </div>
-      <ul class="checklist" [attr.aria-label]="i18n.t('wizard.results')">
+        <h2 id="wizard-checklist-heading">{{ i18n.t('wizard.results') }}</h2>
+        <p id="wizard-checklist-desc">{{ i18n.t('wizard.checklistLead') }} — {{ i18n.t('wizard.resultsDesc') }}</p>
+      </header>
+      <ul class="checklist" role="list" [attr.aria-label]="i18n.t('wizard.results')">
         @for (item of checklist(); track item) {
-          <li class="checklist-item">{{ item }}</li>
+          <li role="listitem">{{ item }}</li>
         }
       </ul>
       <div class="results-actions">
-        <a href="https://vote.gov" target="_blank" rel="noopener noreferrer"
-           class="btn-primary" [attr.aria-label]="i18n.t('wizard.register') + ' (opens in new tab)'">
-          {{ i18n.t('wizard.register') }} ↗
+        <a
+          href="https://vote.gov"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-primary"
+          [attr.aria-label]="i18n.t('wizard.register') + ', ' + i18n.t('accessibility.opensNewTabSuffix')">
+          {{ i18n.t('wizard.register') }}
+          <span aria-hidden="true"> ↗</span>
         </a>
-        <button class="btn-outline-btn" (click)="restart()" [attr.aria-label]="i18n.t('wizard.restart')">
+        <button type="button" class="btn-outline-btn" (click)="restart()" [attr.aria-label]="i18n.t('wizard.restart')">
           {{ i18n.t('wizard.restart') }}
         </button>
       </div>
-    </div>
+    </section>
   }
-</div>
+</section>

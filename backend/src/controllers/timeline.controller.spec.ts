@@ -35,4 +35,22 @@ describe('Timeline Controller', () => {
     const response = (res.json as ReturnType<typeof vi.fn>).mock.calls[0][0];
     expect(response.data.every((e: { location: string }) => e.location === 'all')).toBe(true);
   });
+
+  it('events should cover all timeline event types', () => {
+    const { req, res, next } = createMocks();
+    getTimeline(req, res, next);
+    const response = (res.json as ReturnType<typeof vi.fn>).mock.calls[0][0];
+    const types = new Set(
+      response.data.map((e: { type: string }) => e.type)
+    );
+
+    expect(types.has('registration')).toBe(true);
+    expect(types.has('voting')).toBe(true);
+    expect(types.has('deadline')).toBe(true);
+    expect(types.has('result')).toBe(true);
+
+    for (const ev of response.data as Array<{ type: string }>) {
+      expect(['registration', 'voting', 'deadline', 'result']).toContain(ev.type);
+    }
+  });
 });

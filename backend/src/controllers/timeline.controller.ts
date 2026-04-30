@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 
 interface TimelineEvent {
-  date: string;
-  title: string;
-  description: string;
-  type: 'registration' | 'voting' | 'result' | 'deadline';
-  daysOut: number;
-  location: string;
+  readonly date: string;
+  readonly title: string;
+  readonly description: string;
+  readonly type: 'registration' | 'voting' | 'result' | 'deadline';
+  readonly daysOut: number;
+  readonly location: string;
 }
 
 const timelineEvents: TimelineEvent[] = [
@@ -31,7 +31,7 @@ export const getTimeline = (req: Request, res: Response, next: NextFunction): vo
       : timelineEvents.filter(e => e.location === 'all');
 
     res.json({ success: true, data: filtered, location: location ?? 'all' });
-  } catch (error) {
+  } catch (error: unknown) {
     next(error);
   }
 };

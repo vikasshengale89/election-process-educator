@@ -1,6 +1,7 @@
-import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, inject, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { I18nService } from '../../core/services/i18n.service';
+import { AnalyticsService } from '../../core/services/analytics.service';
 
 interface PollingLocation {
   readonly name: string;
@@ -31,6 +32,7 @@ interface PollingResponse {
 export class Polling {
   readonly i18n = inject(I18nService);
   private readonly http = inject(HttpClient);
+  private readonly analytics = inject(AnalyticsService);
 
   searchAddress = signal('');
   isSearching = signal(false);
@@ -38,6 +40,19 @@ export class Polling {
   results = signal<PollingLocation[]>([]);
   idDocuments = signal<string[]>([]);
   stateName = signal('');
+
+  readonly searchLiveAnnouncement = computed(() => {
+    if (!this.hasSearched()) {
+      return '';
+    }
+    const n = this.results().length;
+    if (n === 0) {
+      return this.i18n.t('polling.searchAnnouncementNone');
+    }
+    return this.i18n
+      .t('polling.searchAnnouncementFound')
+      .replace('{{count}}', String(n));
+  });
 
   onAddressInput(event: Event): void {
     const target = event.target as HTMLInputElement;
@@ -47,6 +62,8 @@ export class Polling {
   search(): void {
     const address = this.searchAddress().trim();
     if (!address) return;
+
+    this.analytics.trackPollingSearch();
 
     this.isSearching.set(true);
     this.hasSearched.set(false);

@@ -36,6 +36,43 @@ export class AnalyticsService {
     });
   }
 
+  /** Funnel milestones for Democracy Guide features (GA event names preserved). */
+  trackWizardStart(): void {
+    this.trackEvent('wizard_start', 'Feature');
+  }
+
+  trackWizardComplete(): void {
+    this.trackEvent('wizard_complete', 'Feature');
+  }
+
+  trackQuizStart(): void {
+    this.trackEvent('quiz_start', 'Feature');
+  }
+
+  trackQuizComplete(score: number): void {
+    this.trackEvent('quiz_complete', 'Feature', undefined, score);
+  }
+
+  trackGlossarySearch(queryLength: number): void {
+    this.trackEvent('glossary_search', 'Feature', undefined, queryLength);
+  }
+
+  trackPollingSearch(): void {
+    this.trackEvent('polling_search', 'Feature');
+  }
+
+  trackShareClick(platform: string): void {
+    this.trackEvent('share_click', 'Feature', platform);
+  }
+
+  /**
+   * Optional engagement payloads (dwell time approximation, completions, repeats).
+   * Maps to GA with a stable category for dashboards.
+   */
+  trackUserEngagement(action: string, label?: string, value?: number): void {
+    this.trackEvent(action, 'User Engagement', label, value);
+  }
+
   private loadGtagScript(): void {
     const gaId = environment.googleAnalyticsId;
     if (!gaId || gaId.startsWith('G-DEMO')) return;

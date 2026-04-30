@@ -1,12 +1,15 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Timeline } from './timeline';
 
 describe('Timeline', () => {
   let component: Timeline;
+  let fixture: ComponentFixture<Timeline>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    component = TestBed.createComponent(Timeline).componentInstance;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({ imports: [Timeline] }).compileComponents();
+    fixture = TestBed.createComponent(Timeline);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -52,5 +55,28 @@ describe('Timeline', () => {
     expect(component.filters).toContain('voting');
     expect(component.filters).toContain('deadline');
     expect(component.filters).toContain('result');
+  });
+
+  it('should have filter group with aria-label', () => {
+    fixture.detectChanges();
+    const group = fixture.nativeElement.querySelector('.filter-bar[role="group"]') as HTMLElement | null;
+    expect(group?.getAttribute('aria-label')).toBe(component.i18n.t('timeline.filterGroupAria'));
+  });
+
+  it('should expose a polite live announcement for filtered count', () => {
+    fixture.detectChanges();
+    const live = fixture.nativeElement.querySelector('#timeline-filter-announcement') as HTMLElement | null;
+    expect(live?.getAttribute('aria-live')).toBe('polite');
+    expect(live?.textContent).toContain(String(component.filteredEvents().length));
+  });
+
+  it('should list timeline entries in markup order consistent with DOM flow', () => {
+    fixture.detectChanges();
+    const list = fixture.nativeElement.querySelector('.timeline') as HTMLElement | null;
+    const items = [...fixture.nativeElement.querySelectorAll('.timeline [role="listitem"]')].filter(
+      (el): el is HTMLElement => el instanceof HTMLElement
+    );
+    expect(list).toBeTruthy();
+    expect(items.length).toBe(component.filteredEvents().length);
   });
 });

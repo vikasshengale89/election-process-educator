@@ -1,6 +1,14 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 
-const questions = [
+interface QuizItem {
+  readonly id: number;
+  readonly question: string;
+  readonly options: readonly string[];
+  readonly correctIndex: number;
+  readonly explanation: string;
+}
+
+const questions: readonly QuizItem[] = [
   {
     id: 1,
     question: 'What is the minimum voting age in the United States?',
@@ -75,7 +83,7 @@ const questions = [
 export const getQuiz = (_req: Request, res: Response, next: NextFunction) => {
   try {
     res.json({ success: true, data: questions });
-  } catch (error) {
+  } catch (error: unknown) {
     next(error);
   }
 };

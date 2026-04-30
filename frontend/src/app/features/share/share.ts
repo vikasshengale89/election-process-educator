@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
 import { I18nService } from '../../core/services/i18n.service';
+import { AnalyticsService } from '../../core/services/analytics.service';
 
 @Component({
   selector: 'app-share',
@@ -11,6 +12,7 @@ import { I18nService } from '../../core/services/i18n.service';
 })
 export class Share {
   readonly i18n = inject(I18nService);
+  private readonly analytics = inject(AnalyticsService);
   isCopied = signal(false);
   selectedPlatform = signal<string | null>(null);
 
@@ -25,6 +27,7 @@ export class Share {
   ];
 
   shareOn(platform: string): void {
+    this.analytics.trackShareClick(platform);
     this.selectedPlatform.set(platform);
     const text = encodeURIComponent(this.shareMessage);
     const url = encodeURIComponent(this.shareUrl);

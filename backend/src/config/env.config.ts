@@ -11,4 +11,5 @@ export const envConfig = {
   googleClientId: process.env['GOOGLE_CLIENT_ID'] ?? '',
   googleClientSecret: process.env['GOOGLE_CLIENT_SECRET'] ?? '',
   googleRedirectUri: process.env['GOOGLE_REDIRECT_URI'] ?? 'http://localhost:3000/api/v1/auth/google/callback',
-};
+  sessionSecret: process.env['SESSION_SECRET'] ?? 'dev-secret-change-in-production',
+} as const;

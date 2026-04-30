@@ -1,27 +1,30 @@
-<div class="glossary-page">
-  <div class="page-header">
-    <h1>📖 {{ i18n.t('glossary.title') }}</h1>
+<section class="glossary-page" aria-labelledby="glossary-page-heading">
+  <header class="page-header">
+    <h1 id="glossary-page-heading"><span aria-hidden="true">📖 </span>{{ i18n.t('glossary.title') }}</h1>
     <p>{{ i18n.t('glossary.subtitle') }}</p>
-  </div>
+  </header>
 
-  <div class="search-bar glass-panel">
-    <label for="glossary-search" class="sr-only">{{ i18n.t('glossary.search') }}</label>
+  <div class="search-bar glass-panel" role="search">
+    <label for="glossary-search" class="sr-only">{{ i18n.t('glossary.searchInputLabel') }}</label>
     <input
       id="glossary-search"
       type="search"
+      name="q"
+      autocomplete="off"
       [placeholder]="'🔍 ' + i18n.t('glossary.search')"
       [value]="searchQuery()"
       (input)="onSearchInput($event)"
-      aria-label="Search election terms"
+      [attr.aria-label]="i18n.t('glossary.searchInputLabel')"
       class="search-input" />
-    <span class="result-count" aria-live="polite" aria-atomic="true">
+    <span id="glossary-result-count" class="result-count" aria-live="polite" aria-atomic="true">
       {{ resultCount() }} {{ resultCount() !== 1 ? i18n.t('glossary.termCount') : i18n.t('glossary.termSingular') }}
     </span>
   </div>
 
-  <div class="category-filters" role="group" aria-label="Filter by category">
+  <div class="category-filters" role="group" [attr.aria-label]="i18n.t('glossary.categoryGroupAria')">
     @for (cat of categories; track cat) {
       <button
+        type="button"
         class="filter-btn"
         [class.active]="activeCategory() === cat"
         (click)="setCategory(cat)"
@@ -32,7 +35,7 @@
     }
   </div>
 
-  <div class="terms-grid" role="list" aria-label="Election glossary terms">
+  <div class="terms-grid" role="list" [attr.aria-label]="i18n.t('glossary.title')">
     @for (term of filteredTerms(); track term.term) {
       <article class="term-card glass-panel" role="listitem">
         <div class="term-header">
@@ -48,8 +51,8 @@
 
     @if (filteredTerms().length === 0) {
       <div class="empty-state glass-panel" role="status" aria-live="polite">
-        <p>🔍 {{ i18n.t('glossary.noResults') }}</p>
+        <p><span aria-hidden="true">🔍 </span>{{ i18n.t('glossary.noResults') }}</p>
       </div>
     }
   </div>
-</div>
+</section>

@@ -40,6 +40,12 @@ export class Timeline {
     return f === 'all' ? this.allEvents : this.allEvents.filter(e => e.type === f);
   });
 
+  readonly filterLiveMessage = computed(() =>
+    this.i18n
+      .t('timeline.liveFilterResults')
+      .replace('{{count}}', String(this.filteredEvents().length))
+  );
+
   setFilter(filter: string): void {
     this.activeFilter.set(filter);
   }

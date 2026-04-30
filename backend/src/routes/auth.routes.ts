@@ -7,11 +7,11 @@ import { logger } from '../utils/logger';
 import { validate } from '../middleware/validate.middleware';
 
 interface SessionData {
-  userId: string;
-  email?: string;
-  name: string;
-  picture?: string;
-  provider: 'google' | 'guest';
+  readonly userId: string;
+  readonly email?: string;
+  readonly name: string;
+  readonly picture?: string;
+  readonly provider: 'google' | 'guest';
 }
 
 const router = Router();

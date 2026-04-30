@@ -1,16 +1,16 @@
 import { Request, Response, NextFunction } from 'express';
 
 interface PollingLocation {
-  name: string;
-  address: string;
-  hours: string;
-  distance: string;
-  accessibility: string[];
+  readonly name: string;
+  readonly address: string;
+  readonly hours: string;
+  readonly distance: string;
+  readonly accessibility: readonly string[];
 }
 
 interface IdRequirement {
-  state: string;
-  documents: string[];
+  readonly state: string;
+  readonly documents: readonly string[];
 }
 
 const stateIdRequirements: Record<string, IdRequirement> = {
@@ -98,7 +98,7 @@ export const getPollingLocation = (req: Request, res: Response, next: NextFuncti
         zip
       }
     });
-  } catch (error) {
+  } catch (error: unknown) {
     next(error);
   }
 };

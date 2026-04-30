@@ -45,11 +45,12 @@ describe('NavbarComponent', () => {
 
   it('should have nav with proper ARIA', async () => {
     const fixture = TestBed.createComponent(NavbarComponent);
+    const cmp = fixture.componentInstance;
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
     const nav = compiled.querySelector('[role="navigation"]');
     expect(nav).toBeTruthy();
-    expect(nav?.getAttribute('aria-label')).toBe('Main navigation');
+    expect(nav?.getAttribute('aria-label')).toBe(cmp.i18n.t('nav.ariaMain'));
   });
 
   it('should have language switch button', async () => {

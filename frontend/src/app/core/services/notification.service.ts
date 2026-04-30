@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
 
 interface ElectionReminder {
   readonly id: string;
@@ -16,6 +16,11 @@ export class NotificationService {
   readonly isEnabled = this._isEnabled.asReadonly();
   readonly reminders = this._reminders.asReadonly();
 
+  /** Count of reminders that are today or in the future (for navbar indicator). */
+  readonly upcomingReminderCount = computed(
+    () => this._reminders().filter(r => r.daysUntil >= 0).length
+  );
+
   constructor() {
     this.loadReminders();
   }
@@ -32,10 +37,10 @@ export class NotificationService {
   private loadReminders(): void {
     const today = new Date();
     const events: ElectionReminder[] = [
-      { id: '1', title: 'Voter Registration Deadline', date: '2025-11-01', daysUntil: 0, type: 'registration' },
-      { id: '2', title: 'Early Voting Begins', date: '2025-10-15', daysUntil: 0, type: 'voting' },
-      { id: '3', title: 'Absentee Ballot Request Deadline', date: '2025-10-22', daysUntil: 0, type: 'deadline' },
-      { id: '4', title: 'Election Day', date: '2025-11-05', daysUntil: 0, type: 'voting' },
+      { id: '1', title: 'Voter Registration Deadline', date: '2026-10-09', daysUntil: 0, type: 'registration' },
+      { id: '2', title: 'Early Voting Begins', date: '2026-10-20', daysUntil: 0, type: 'voting' },
+      { id: '3', title: 'Absentee Ballot Request Deadline', date: '2026-10-27', daysUntil: 0, type: 'deadline' },
+      { id: '4', title: 'Election Day', date: '2026-11-03', daysUntil: 0, type: 'voting' },
     ];
 
     this._reminders.set(events.map(e => ({

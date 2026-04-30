@@ -2,11 +2,12 @@ import { Component, ChangeDetectionStrategy, inject, signal, computed } from '@a
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../auth';
 import { I18nService } from '../../../core/services/i18n.service';
+import { NotificationIndicatorComponent } from '../notification-indicator/notification-indicator.component';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, NotificationIndicatorComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'

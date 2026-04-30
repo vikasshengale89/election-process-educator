@@ -1,5 +1,6 @@
-import { Component, ChangeDetectionStrategy, signal, computed, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, signal, computed, inject } from '@angular/core';
 import { I18nService } from '../../core/services/i18n.service';
+import { AnalyticsService } from '../../core/services/analytics.service';
 
 interface QuizQuestion {
   readonly id: number;
@@ -17,8 +18,13 @@ interface QuizQuestion {
   templateUrl: './quiz.html',
   styleUrl: './quiz.css'
 })
-export class Quiz {
+export class Quiz implements OnInit {
   readonly i18n = inject(I18nService);
+  private readonly analytics = inject(AnalyticsService);
+
+  ngOnInit(): void {
+    this.analytics.trackQuizStart();
+  }
 
   currentIndex = signal(0);
   selectedAnswer = signal<number | null>(null);
@@ -64,6 +70,9 @@ export class Quiz {
       this.answeredCorrectly.set(null);
     } else {
       this.isComplete.set(true);
+      const finalScore = this.score();
+      this.analytics.trackQuizComplete(finalScore);
+      this.analytics.trackUserEngagement('quiz_engagement', 'completed', finalScore);
     }
   }
 

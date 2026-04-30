@@ -1,10 +1,10 @@
 type LogLevel = 'info' | 'warn' | 'error' | 'debug';
 
 interface LogEntry {
-  level: LogLevel;
-  message: string;
-  timestamp: string;
-  data?: unknown;
+  readonly level: LogLevel;
+  readonly message: string;
+  readonly timestamp: string;
+  readonly data?: unknown;
 }
 
 class Logger {

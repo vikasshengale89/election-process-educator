@@ -6,10 +6,21 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { AnalyticsService } from './core/services/analytics.service';
+import { PerformanceService } from './core/services/performance.service';
 
 function initializeAnalytics(): () => void {
   const analytics = inject(AnalyticsService);
   return () => analytics.init();
+}
+
+function initializePerformance(): () => void {
+  const perf = inject(PerformanceService);
+  return () => {
+    perf.measureNavigation();
+    perf.measureLCP();
+    perf.measureFID();
+    perf.measureCLS();
+  };
 }
 
 export const appConfig: ApplicationConfig = {
@@ -21,6 +32,11 @@ export const appConfig: ApplicationConfig = {
     {
       provide: APP_INITIALIZER,
       useFactory: initializeAnalytics,
+      multi: true
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializePerformance,
       multi: true
     }
   ],

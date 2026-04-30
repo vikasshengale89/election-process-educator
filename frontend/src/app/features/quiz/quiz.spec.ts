@@ -1,12 +1,15 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Quiz } from './quiz';
 
 describe('Quiz', () => {
   let component: Quiz;
+  let fixture: ComponentFixture<Quiz>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    component = TestBed.createComponent(Quiz).componentInstance;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({ imports: [Quiz] }).compileComponents();
+    fixture = TestBed.createComponent(Quiz);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -79,5 +82,32 @@ describe('Quiz', () => {
     expect(component.getOptionClass(0)).toBe('');
     component.selectAnswer(component.currentQuestion().correctIndex);
     expect(component.getOptionClass(component.currentQuestion().correctIndex)).toBe('correct');
+  });
+
+  it('should have progressbar with aria attributes', () => {
+    const bar = fixture.nativeElement.querySelector('[role="progressbar"]') as HTMLElement | null;
+    expect(bar).toBeTruthy();
+    expect(bar?.getAttribute('aria-valuemin')).toBe('1');
+    expect(bar?.getAttribute('aria-valuemax')).toBe(String(component.totalQuestions));
+    expect(bar?.getAttribute('aria-valuenow')).toBe('1');
+  });
+
+  it('should announce answer result with role alert', () => {
+    component.selectAnswer(component.currentQuestion().correctIndex);
+    fixture.detectChanges();
+    const alert = fixture.nativeElement.querySelector('[role="alert"]') as HTMLElement | null;
+    expect(alert).toBeTruthy();
+    expect(alert?.getAttribute('aria-live')).toBe('assertive');
+  });
+
+  it('should keep focus targets in document order within the question panel', () => {
+    fixture.detectChanges();
+    const progress = fixture.nativeElement.querySelector('[role="progressbar"]') as HTMLElement | null;
+    const radios = [...fixture.nativeElement.querySelectorAll('[role="radio"]')].filter(
+      (el): el is HTMLElement => el instanceof HTMLElement
+    );
+    expect(progress).toBeTruthy();
+    expect(radios.length).toBeGreaterThan(0);
+    radios.forEach(r => expect(r instanceof HTMLButtonElement && !r.disabled).toBe(true));
   });
 });

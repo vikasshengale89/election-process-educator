@@ -1,12 +1,15 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Glossary } from './glossary';
 
 describe('Glossary', () => {
   let component: Glossary;
+  let fixture: ComponentFixture<Glossary>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    component = TestBed.createComponent(Glossary).componentInstance;
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({ imports: [Glossary] }).compileComponents();
+    fixture = TestBed.createComponent(Glossary);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -63,5 +66,27 @@ describe('Glossary', () => {
     const filtered = component.filteredTerms();
     expect(filtered.length).toBe(1);
     expect(filtered[0].term).toBe('Gerrymandering');
+  });
+
+  it('should have search input with label', () => {
+    const label = fixture.nativeElement.querySelector('label[for="glossary-search"]') as HTMLLabelElement | null;
+    const input = fixture.nativeElement.querySelector('#glossary-search') as HTMLInputElement | null;
+    expect(label?.textContent?.trim().length ?? 0).toBeGreaterThan(0);
+    expect(input?.id).toBe('glossary-search');
+    expect(input?.getAttribute('aria-label')).toBe(component.i18n.t('glossary.searchInputLabel'));
+  });
+
+  it('should have live region for result count', () => {
+    const live = fixture.nativeElement.querySelector('#glossary-result-count') as HTMLElement | null;
+    expect(live?.getAttribute('aria-live')).toBe('polite');
+    expect(live?.getAttribute('aria-atomic')).toBe('true');
+  });
+
+  it('should expose glossary category buttons in a sane tab order before the grid', () => {
+    fixture.detectChanges();
+    const buttons = [...fixture.nativeElement.querySelectorAll('.filter-btn')].filter(
+      (el): el is HTMLButtonElement => el instanceof HTMLButtonElement
+    );
+    buttons.forEach(b => expect(b.tabIndex).toBeLessThanOrEqual(0));
   });
 });

@@ -69,4 +69,51 @@ describe('Polling Controller', () => {
       expect(loc.accessibility.length).toBeGreaterThan(0);
     }
   });
+
+  it('should call next when zip is missing (invalid query for controller)', () => {
+    const { req, res, next } = createMocks({});
+    getPollingLocation(req, res, next);
+
+    expect(res.json).not.toHaveBeenCalled();
+    expect(next).toHaveBeenCalledWith(expect.any(Error));
+  });
+
+  it('maps Illinois ZIP prefix boundaries (600–629)', () => {
+    for (const zip of ['60001', '61500', '62999']) {
+      const { req, res, next } = createMocks({ zip });
+      getPollingLocation(req, res, next);
+      const response = (res.json as ReturnType<typeof vi.fn>).mock.calls[0][0];
+      expect(response.data.state).toBe('Illinois');
+    }
+    const beyond = createMocks({ zip: '63001' });
+    getPollingLocation(beyond.req, beyond.res, beyond.next);
+    const responseBeyond = (beyond.res.json as ReturnType<typeof vi.fn>).mock.calls[0][0];
+    expect(responseBeyond.data.state).toBe('General');
+  });
+
+  it('maps California ZIP prefix boundaries (900–961)', () => {
+    for (const zip of ['90000', '93500', '96199']) {
+      const { req, res, next } = createMocks({ zip });
+      getPollingLocation(req, res, next);
+      const response = (res.json as ReturnType<typeof vi.fn>).mock.calls[0][0];
+      expect(response.data.state).toBe('California');
+    }
+    const beyond = createMocks({ zip: '96201' });
+    getPollingLocation(beyond.req, beyond.res, beyond.next);
+    const responseBeyond = (beyond.res.json as ReturnType<typeof vi.fn>).mock.calls[0][0];
+    expect(responseBeyond.data.state).toBe('General');
+  });
+
+  it('maps New York ZIP prefix boundaries (100–149)', () => {
+    for (const zip of ['10001', '12000', '14999']) {
+      const { req, res, next } = createMocks({ zip });
+      getPollingLocation(req, res, next);
+      const response = (res.json as ReturnType<typeof vi.fn>).mock.calls[0][0];
+      expect(response.data.state).toBe('New York');
+    }
+    const beyond = createMocks({ zip: '15001' });
+    getPollingLocation(beyond.req, beyond.res, beyond.next);
+    const responseBeyond = (beyond.res.json as ReturnType<typeof vi.fn>).mock.calls[0][0];
+    expect(responseBeyond.data.state).toBe('General');
+  });
 });

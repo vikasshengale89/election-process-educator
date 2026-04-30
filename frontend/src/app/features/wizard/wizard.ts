@@ -1,5 +1,6 @@
-import { Component, ChangeDetectionStrategy, signal, computed, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, signal, computed, inject } from '@angular/core';
 import { I18nService } from '../../core/services/i18n.service';
+import { AnalyticsService } from '../../core/services/analytics.service';
 
 interface WizardStep {
   id: number;
@@ -16,8 +17,13 @@ interface WizardStep {
   templateUrl: './wizard.html',
   styleUrl: './wizard.css'
 })
-export class Wizard {
+export class Wizard implements OnInit {
   readonly i18n = inject(I18nService);
+  private readonly analytics = inject(AnalyticsService);
+
+  ngOnInit(): void {
+    this.analytics.trackWizardStart();
+  }
   currentStep = signal(0);
   answers = signal<Record<string, string>>({});
   isComplete = signal(false);
@@ -97,6 +103,8 @@ export class Wizard {
       this.currentStep.update(s => s + 1);
     } else {
       this.isComplete.set(true);
+      this.analytics.trackWizardComplete();
+      this.analytics.trackUserEngagement('wizard_engagement', 'completed', this.totalSteps);
     }
   }
 

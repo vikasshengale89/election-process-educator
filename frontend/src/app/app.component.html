@@ -4,7 +4,7 @@
   <app-navbar></app-navbar>
 }
 
-<main id="main-content" class="container" role="main" aria-label="Main content">
+<main id="main-content" class="container" role="main" [attr.aria-label]="i18n.t('accessibility.mainContent')">
   <router-outlet></router-outlet>
 </main>
 

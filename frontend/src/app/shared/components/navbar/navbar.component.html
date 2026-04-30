@@ -1,7 +1,10 @@
-<nav class="navbar glass-panel" role="navigation" aria-label="Main navigation">
-  <a class="navbar-brand" routerLink="/" aria-label="Election Process Educator Home" (click)="closeMenu()">
-    <span aria-hidden="true">🗳️</span> {{ i18n.t('nav.brand') }}
-  </a>
+<nav class="navbar glass-panel" role="navigation" [attr.aria-label]="i18n.t('nav.ariaMain')">
+  <div class="navbar-start">
+    <a class="navbar-brand" routerLink="/" aria-label="Election Process Educator Home" (click)="closeMenu()">
+      <span aria-hidden="true">🗳️</span> {{ i18n.t('nav.brand') }}
+    </a>
+    <app-notification-indicator class="nav-notification-slot" />
+  </div>
 
   <button
     class="nav-toggle"
@@ -9,26 +12,26 @@
     [attr.aria-expanded]="isMenuOpen()"
     aria-controls="nav-links"
     aria-label="Toggle navigation menu">
-    <span class="hamburger-line"></span>
-    <span class="hamburger-line"></span>
-    <span class="hamburger-line"></span>
+    <span class="hamburger-line" aria-hidden="true"></span>
+    <span class="hamburger-line" aria-hidden="true"></span>
+    <span class="hamburger-line" aria-hidden="true"></span>
   </button>
 
   <ul id="nav-links" class="nav-links" [class.open]="isMenuOpen()" role="list">
-    <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="closeMenu()">{{ i18n.t('nav.home') }}</a></li>
-    <li><a routerLink="/wizard" routerLinkActive="active" (click)="closeMenu()">📋 {{ i18n.t('nav.wizard') }}</a></li>
-    <li><a routerLink="/timeline" routerLinkActive="active" (click)="closeMenu()">📅 {{ i18n.t('nav.timeline') }}</a></li>
-    <li><a routerLink="/glossary" routerLinkActive="active" (click)="closeMenu()">📖 {{ i18n.t('nav.glossary') }}</a></li>
-    <li><a routerLink="/quiz" routerLinkActive="active" (click)="closeMenu()">🧠 {{ i18n.t('nav.quiz') }}</a></li>
-    <li><a routerLink="/polling" routerLinkActive="active" (click)="closeMenu()">📍 {{ i18n.t('nav.polling') }}</a></li>
-    <li><a routerLink="/share" routerLinkActive="active" (click)="closeMenu()">📢 {{ i18n.t('nav.share') }}</a></li>
-    <li>
-      <button class="btn-lang" (click)="switchLanguage()" aria-label="Switch language">
-        🌐 {{ i18n.t('lang.switch') }}
+    <li role="listitem"><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" (click)="closeMenu()">{{ i18n.t('nav.home') }}</a></li>
+    <li role="listitem"><a routerLink="/wizard" routerLinkActive="active" (click)="closeMenu()"><span class="nav-emoji" aria-hidden="true">📋</span> {{ i18n.t('nav.wizard') }}</a></li>
+    <li role="listitem"><a routerLink="/timeline" routerLinkActive="active" (click)="closeMenu()"><span class="nav-emoji" aria-hidden="true">📅</span> {{ i18n.t('nav.timeline') }}</a></li>
+    <li role="listitem"><a routerLink="/glossary" routerLinkActive="active" (click)="closeMenu()"><span class="nav-emoji" aria-hidden="true">📖</span> {{ i18n.t('nav.glossary') }}</a></li>
+    <li role="listitem"><a routerLink="/quiz" routerLinkActive="active" (click)="closeMenu()"><span class="nav-emoji" aria-hidden="true">🧠</span> {{ i18n.t('nav.quiz') }}</a></li>
+    <li role="listitem"><a routerLink="/polling" routerLinkActive="active" (click)="closeMenu()"><span class="nav-emoji" aria-hidden="true">📍</span> {{ i18n.t('nav.polling') }}</a></li>
+    <li role="listitem"><a routerLink="/share" routerLinkActive="active" (click)="closeMenu()"><span class="nav-emoji" aria-hidden="true">📢</span> {{ i18n.t('nav.share') }}</a></li>
+    <li role="listitem">
+      <button class="btn-lang" type="button" (click)="switchLanguage()" aria-label="Switch language">
+        <span aria-hidden="true">🌐</span> {{ i18n.t('lang.switch') }}
       </button>
     </li>
-    <li>
-      <button class="btn-logout" (click)="logout()" aria-label="Log out">
+    <li role="listitem">
+      <button class="btn-logout" type="button" (click)="logout()" aria-label="Log out">
         {{ currentUser()?.name?.split(' ')?.[0] ?? 'Guest' }} · {{ i18n.t('nav.logout') }}
       </button>
     </li>

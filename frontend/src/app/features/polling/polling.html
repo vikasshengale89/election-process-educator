@@ -1,11 +1,12 @@
-<div class="polling-page">
-  <div class="page-header">
-    <h1>📍 {{ i18n.t('polling.title') }}</h1>
+<section class="polling-page" aria-labelledby="polling-page-heading">
+  <header class="page-header">
+    <h1 id="polling-page-heading"><span aria-hidden="true">📍 </span>{{ i18n.t('polling.title') }}</h1>
     <p>{{ i18n.t('polling.subtitle') }}</p>
-  </div>
+  </header>
 
-  <div class="glass-panel search-section">
-    <label for="address-input" class="sr-only">{{ i18n.t('polling.placeholder') }}</label>
+  <section class="glass-panel search-section" aria-labelledby="polling-search-heading">
+    <h2 id="polling-search-heading" class="sr-only">{{ i18n.t('polling.search') }}</h2>
+    <label for="address-input" class="sr-only">{{ i18n.t('polling.searchInputLabel') }}</label>
     <div class="search-row">
       <input
         id="address-input"
@@ -15,21 +16,24 @@
         [value]="searchAddress()"
         (input)="onAddressInput($event)"
         (keydown.enter)="search()"
-        [attr.aria-label]="i18n.t('polling.placeholder')" />
+        [attr.aria-label]="i18n.t('polling.searchInputLabel')" />
       <button
+        type="button"
         class="btn-primary"
         (click)="search()"
         [disabled]="isSearching() || !searchAddress().trim()"
         [attr.aria-label]="i18n.t('polling.search')">
-        {{ isSearching() ? '...' : i18n.t('polling.search') }}
+        {{ isSearching() ? '…' : i18n.t('polling.search') }}
       </button>
     </div>
-  </div>
+  </section>
+
+  <p id="polling-search-announcement" class="sr-only" aria-live="polite" aria-atomic="true">{{ searchLiveAnnouncement() }}</p>
 
   @if (hasSearched() && results().length > 0) {
-    <section aria-label="Polling locations found">
-      <h2 class="section-title">{{ i18n.t('polling.nearbyTitle') }}</h2>
-      <div class="locations-grid" role="list">
+    <section role="region" [attr.aria-label]="i18n.t('polling.locationsSection')">
+      <h2 class="section-title" id="polling-locations-heading">{{ i18n.t('polling.nearbyTitle') }}</h2>
+      <div class="locations-grid" role="list" aria-labelledby="polling-locations-heading">
         @for (loc of results(); track loc.name) {
           <article class="location-card glass-panel" role="listitem">
             <div class="location-header">
@@ -42,11 +46,11 @@
             </div>
             <div class="location-detail">
               <span class="detail-icon" aria-hidden="true">🕐</span>
-              <span>{{ loc.hours }}</span>
+              <span>{{ i18n.t('polling.hours') }}: {{ loc.hours }}</span>
             </div>
-            <div class="accessibility-tags" aria-label="Accessibility features">
+            <div class="accessibility-tags" role="group" [attr.aria-label]="i18n.t('polling.step3')">
               @for (tag of loc.accessibility; track tag) {
-                <span class="a11y-tag">♿ {{ tag }}</span>
+                <span class="a11y-tag"><span aria-hidden="true">♿ </span>{{ tag }}</span>
               }
             </div>
           </article>
@@ -54,10 +58,14 @@
       </div>
     </section>
 
-    <section class="glass-panel id-section" aria-labelledby="id-heading">
-      <h2 id="id-heading">🪪 {{ i18n.t('polling.idTitle') }} — {{ stateName() }}</h2>
-      <p>{{ i18n.t('polling.idNote') }}</p>
-      <ul class="id-list" role="list">
+    <section
+      class="glass-panel id-section"
+      role="region"
+      aria-labelledby="id-heading"
+      aria-describedby="id-note">
+      <h2 id="id-heading"><span aria-hidden="true">🪪 </span>{{ i18n.t('polling.idTitle') }} — {{ stateName() }}</h2>
+      <p id="id-note">{{ i18n.t('polling.idNote') }}</p>
+      <ul class="id-list" role="list" aria-labelledby="id-heading">
         @for (doc of idDocuments(); track doc) {
           <li role="listitem">{{ doc }}</li>
         }
@@ -72,22 +80,22 @@
   }
 
   @if (!hasSearched() && !isSearching()) {
-    <div class="glass-panel info-section">
-      <h2>{{ i18n.t('polling.howItWorks') }}</h2>
-      <div class="steps-row">
-        <div class="info-step">
+    <aside class="glass-panel info-section" aria-labelledby="polling-how-heading">
+      <h2 id="polling-how-heading">{{ i18n.t('polling.howItWorks') }}</h2>
+      <div class="steps-row" role="list">
+        <div class="info-step" role="listitem">
           <span class="step-num" aria-hidden="true">1</span>
           <p>{{ i18n.t('polling.step1') }}</p>
         </div>
-        <div class="info-step">
+        <div class="info-step" role="listitem">
           <span class="step-num" aria-hidden="true">2</span>
           <p>{{ i18n.t('polling.step2') }}</p>
         </div>
-        <div class="info-step">
+        <div class="info-step" role="listitem">
           <span class="step-num" aria-hidden="true">3</span>
           <p>{{ i18n.t('polling.step3') }}</p>
         </div>
       </div>
-    </div>
+    </aside>
   }
-</div>
+</section>

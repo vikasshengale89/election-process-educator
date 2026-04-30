@@ -22,7 +22,7 @@ const glossaryTerms = [
 export const getGlossary = (_req: Request, res: Response, next: NextFunction) => {
   try {
     res.json({ success: true, data: glossaryTerms });
-  } catch (error) {
+  } catch (error: unknown) {
     next(error);
   }
 };

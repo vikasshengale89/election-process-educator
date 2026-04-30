@@ -2,9 +2,7 @@ import { Injectable, signal, computed } from '@angular/core';
 
 export type SupportedLang = 'en' | 'es';
 
-interface TranslationMap {
-  [key: string]: string;
-}
+type TranslationMap = Record<string, string>;
 
 const TRANSLATIONS: Record<SupportedLang, TranslationMap> = {
   en: {
@@ -17,6 +15,7 @@ const TRANSLATIONS: Record<SupportedLang, TranslationMap> = {
     'nav.share': 'Share',
     'nav.logout': 'Logout',
     'nav.brand': 'Democracy Guide',
+    'nav.ariaMain': 'Main navigation',
     'home.badge': 'Your Democracy Companion',
     'home.title': 'Demystifying',
     'home.titleHighlight': 'Democracy',
@@ -43,6 +42,7 @@ const TRANSLATIONS: Record<SupportedLang, TranslationMap> = {
     'timeline.title': 'Election Timeline',
     'timeline.subtitle': 'Key dates and deadlines for the 2025–2026 election cycle.',
     'timeline.disclaimer': 'Dates shown are illustrative examples. Always verify exact deadlines with your local or state election office.',
+    'timeline.voteGovLink': 'vote.gov',
     'glossary.title': 'Election Glossary',
     'glossary.subtitle': 'Plain-language explanations of every election term you will ever encounter.',
     'glossary.search': 'Search terms...',
@@ -99,7 +99,26 @@ const TRANSLATIONS: Record<SupportedLang, TranslationMap> = {
     'polling.step2': 'We find your nearest polling locations',
     'polling.step3': 'View hours, accessibility info, and ID requirements',
     'timeline.noEvents': 'No events found for this filter.',
+    'timeline.filterGroupAria': 'Filter timeline events by type',
+    'timeline.liveFilterResults': '{{count}} events listed for the current filter.',
+    'timeline.listAria': 'Election timeline events',
+    'timeline.disclaimerAside': 'Disclaimer about illustrative election dates',
     'accessibility.skipToContent': 'Skip to main content',
+    'accessibility.mainContent': 'Main content',
+    'glossary.searchInputLabel': 'Search election glossary terms',
+    'glossary.categoryGroupAria': 'Filter glossary terms by category',
+    'wizard.checklistLead': 'Personalized checklist based on your answers',
+    'polling.searchInputLabel': 'Search for your polling location by registered address',
+    'polling.searchAnnouncementFound': '{{count}} polling locations found for your search.',
+    'polling.searchAnnouncementNone': 'No polling locations matched your search.',
+    'polling.locationsSection': 'Nearby polling locations',
+    'quiz.resultsRegion': 'Quiz results',
+    'share.platformGroupAria': 'Share on social media platforms',
+    'notifications.indicatorNone': 'Election reminders are on. No upcoming deadlines in the tracked list.',
+    'notifications.indicatorCount': '{{count}} upcoming election reminders tracked',
+    'home.notificationButtonEnabled': 'Notifications already enabled',
+    'home.notificationButtonEnable': 'Enable election deadline notifications',
+    'accessibility.opensNewTabSuffix': 'opens in a new tab',
   },
   es: {
     'nav.home': 'Inicio',
@@ -111,6 +130,7 @@ const TRANSLATIONS: Record<SupportedLang, TranslationMap> = {
     'nav.share': 'Compartir',
     'nav.logout': 'Salir',
     'nav.brand': 'Guía Democrática',
+    'nav.ariaMain': 'Navegación principal',
     'home.badge': 'Tu Compañero Democrático',
     'home.title': 'Desmitificando la',
     'home.titleHighlight': 'Democracia',
@@ -137,6 +157,7 @@ const TRANSLATIONS: Record<SupportedLang, TranslationMap> = {
     'timeline.title': 'Cronología Electoral',
     'timeline.subtitle': 'Fechas clave y plazos para el ciclo electoral 2025–2026.',
     'timeline.disclaimer': 'Las fechas mostradas son ejemplos ilustrativos. Siempre verifique los plazos exactos con su oficina electoral local o estatal.',
+    'timeline.voteGovLink': 'vote.gov',
     'glossary.title': 'Glosario Electoral',
     'glossary.subtitle': 'Explicaciones en lenguaje sencillo de cada término electoral.',
     'glossary.search': 'Buscar términos...',
@@ -193,7 +214,26 @@ const TRANSLATIONS: Record<SupportedLang, TranslationMap> = {
     'polling.step2': 'Encontramos sus centros de votación más cercanos',
     'polling.step3': 'Vea horarios, información de accesibilidad y requisitos de ID',
     'timeline.noEvents': 'No se encontraron eventos para este filtro.',
+    'timeline.filterGroupAria': 'Filtrar eventos de la cronología por tipo',
+    'timeline.liveFilterResults': '{{count}} eventos mostrados para el filtro actual.',
+    'timeline.listAria': 'Eventos de la cronología electoral',
+    'timeline.disclaimerAside': 'Aviso sobre fechas electorales de ejemplo',
     'accessibility.skipToContent': 'Saltar al contenido principal',
+    'accessibility.mainContent': 'Contenido principal',
+    'glossary.searchInputLabel': 'Buscar términos del glosario electoral',
+    'glossary.categoryGroupAria': 'Filtrar términos del glosario por categoría',
+    'wizard.checklistLead': 'Lista personalizada según sus respuestas',
+    'polling.searchInputLabel': 'Busque su centro de votación por la dirección registrada',
+    'polling.searchAnnouncementFound': '{{count}} centros de votación encontrados para su búsqueda.',
+    'polling.searchAnnouncementNone': 'Ningún centro de votación coincide con su búsqueda.',
+    'polling.locationsSection': 'Centros de votación cercanos',
+    'quiz.resultsRegion': 'Resultados del cuestionario',
+    'share.platformGroupAria': 'Compartir en redes sociales',
+    'notifications.indicatorNone': 'Recordatorios activos. No hay plazos próximos en la lista.',
+    'notifications.indicatorCount': '{{count}} recordatorios electorales próximos',
+    'home.notificationButtonEnabled': 'Notificaciones ya activadas',
+    'home.notificationButtonEnable': 'Activar recordatorios de plazos electorales',
+    'accessibility.opensNewTabSuffix': 'se abre en una pestaña nueva',
   }
 };
 

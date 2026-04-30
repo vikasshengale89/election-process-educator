@@ -1,21 +1,22 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { Polling } from './polling';
 
 describe('Polling', () => {
   let component: Polling;
+  let fixture: ComponentFixture<Polling>;
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting()
-      ]
+      imports: [Polling],
+      providers: [provideHttpClient(), provideHttpClientTesting()]
     });
-    component = TestBed.createComponent(Polling).componentInstance;
+    fixture = TestBed.createComponent(Polling);
+    component = fixture.componentInstance;
     httpMock = TestBed.inject(HttpTestingController);
+    fixture.detectChanges();
   });
 
   afterEach(() => {
@@ -62,6 +63,7 @@ describe('Polling', () => {
       }
     });
 
+    fixture.detectChanges();
     expect(component.results().length).toBe(1);
     expect(component.stateName()).toBe('Illinois');
     expect(component.hasSearched()).toBe(true);
@@ -73,8 +75,34 @@ describe('Polling', () => {
 
     const req = httpMock.expectOne((r) => r.url.includes('/api/v1/polling'));
     req.error(new ProgressEvent('error'));
+    fixture.detectChanges();
 
     expect(component.results().length).toBe(0);
     expect(component.hasSearched()).toBe(true);
+  });
+
+  it('should have search input with accessible label', () => {
+    const input = fixture.nativeElement.querySelector('#address-input') as HTMLInputElement | null;
+    expect(input?.getAttribute('aria-label')).toBe(component.i18n.t('polling.searchInputLabel'));
+  });
+
+  it('should announce search results with a polite live region after search', () => {
+    component.searchAddress.set('123 Main St 62701');
+    component.search();
+    const req = httpMock.expectOne((r) => r.url.includes('/api/v1/polling'));
+    req.flush({
+      success: true,
+      data: {
+        locations: [{ name: 'Hall A', address: 'X', hours: '7-7', distance: '1mi', accessibility: ['Ramp'] }],
+        idRequirements: { state: 'IL', documents: ['ID'] },
+        state: 'Illinois',
+        zip: '62701'
+      }
+    });
+    fixture.detectChanges();
+
+    const live = fixture.nativeElement.querySelector('#polling-search-announcement') as HTMLElement | null;
+    expect(live?.getAttribute('aria-live')).toBe('polite');
+    expect(live?.textContent).toContain('1');
   });
 });
